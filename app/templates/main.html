@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charrset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <meta name="author" content="Ivan Azhari:">
+        <title></title>
+        <link rel="stylesheet" href="{{ url_for('static', path='css/bootstraps/bootstrap.min.css') }}" />
+        <link rel="stylesheet" href="{{ url_for('static', path='css/bootstrap-icons.css') }}" />
+        <link rel="stylesheet" href="{{ url_for('static', path='css/magnific-popup.css') }}" />
+        <link rel="stylesheet" href="{{ url_for('static', path='css/aos.css') }}" />
+        <link rel="stylesheet" href="{{ url_for('static', path='css/main.css') }}" />
+    </head>
+    <body>
+        <main>
+            <section class="hero" id="hero">
+                <div class="heroText">
+                    <h1 class="text-white mt-5 mb-lg-4" data-aos="zoom-in" data-aos-delay="600">
+                        TV Engineering Mail Broadcast
+                    </h1>
+                    <p class="text-secondary-white-color" data-aos="fade-up" data-aos-delay="1000">
+                        PT SHARP Electronics Indonesia
+                    </p>
+                </div>
+                <div class="videoWrapper">
+                    <video autoplay="" logo="" muted="" class="custom-video" poster="{{ url_for('static', path='assets/images/00writers-gig-superJumbo.webp') }}">
+                        
+                    </video>
+                </div>
+                <div class="overlay"></div>
+            </section>
+            <nav class="navbar navbar-expand-lg bg-light shadow-lg">
+                <div class="container">
+                    <a class="navbar-brand" href="#">
+                        <strong>Broadcast Mailing</strong>
+                    </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav mx-auto">
+                            <li class="nav-item active">
+                                <a class="nav-link" href="/app">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="">Mail</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/app/documents">Document list</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/app/document/upload">Upload Document</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/app/user/recipients">Recipient</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </main>
+        <footer class="site-footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <h5 class="text-white">
+                            <i class="bi-geo-alt-fill me-2"></i>
+                            PT SHARP Electronics Indonesia, TV Engineering
+                        </h5>
+                        <a href="mailto:tv_eng@seid.sharp-global.com" class="custom-link">tv_eng@seid.sharp-world.com</a>
+                    </div>
+                    <div class="col-6">
+                        <p class="copyright-text mb-0">Copyright © TV Engineering</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <script src="{{ url_for('static', path='js/jquery.min.js') }}"></script>
+        <script src="{{ url_for('static', path='js/aos.js') }}"></script>
+        <script src="{{ url_for('static', path='js/custom.js') }}"></script>
+        <script src="{{ url_for('static', path='js/jquery.sticky.js') }}"></script>
+        <script src="{{ url_for('static', path='js/jquery.magnific-popup.min.js') }}"></script>
+        <script src="{{ url_for('static', path='js/magnific-popup-options.js') }}"></script>
+        <script src="{{ url_for('static', path='js/scrollspy.min.js') }}"></script>
+    </body>
+</html>

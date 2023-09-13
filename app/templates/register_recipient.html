@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+        <title></title>
+        <link rel="stylesheet" href="{{ url_for('static', path='css/bootstraps/bootstrap.min.css') }}" />
+        <link rel="stylesheet" href="" />
+    </head>
+    <body class="bg-transparent">
+        <div class="container-fluid">
+            <nav class="navbar navbar-expand-lg navbar-light">
+                <a href="/app" class="navbar-brand">
+                    <img src="{{ url_for('static', path='assets/images/brand.png') }}" height="35px;">
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#registerNavbar"
+                    aria-expanded="false">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="registerNavbar">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link mx-2 active" href="/app">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link mx-2" href="#">Register Document</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link mx-2" href="#">Register Recipient</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+        <div class="container">
+            <div class="row md-5 ms-3 mt-2 justify-content-center align-items-center">
+                <h3><strong>Register Recipients</strong></h3>
+            </div>
+            <div class="row md-5 ms-3 mt-4">
+                <div class="col-md-6 justify-content-center align-items-center">
+                    <div class="mt-2">
+                        <label for="recipientMail" class="form-label">Recipient Mail</label>
+                        <input id="recipientMail" class="form-control" style="width: 50%;">
+                    </div>
+                    <div class="mt-2">
+                        <label for="recipientName" class="form-label">Recipient Name</label>
+                        <input id="recipientName" class="form-control" style="width: 50%;">
+                    </div>
+                    <div class="mt-2">
+                        <label for="" class="form-label">Division</label>
+                        <select id="rDivision" class="form-select" style="width: 50%;" name="rDivision">
+                            {% for i in recipient_list %}
+                                <option value="{{ i }}">{{ i }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6 justify-content-center align-items-center">
+                    <div class="row md-5">
+                        <h3><strong>List of Available Recipients</strong></h3>
+                    </div>
+                    <div class="row">
+                        <div class="mt-2">
+                            <input class="form-control" style="width: 45%;" placeholder="Search">
+                        </div>
+                    </div>
+                    <table class="table align-middle mt-3">
+                        <thead>
+                            <tr>
+                                <th scope="col">No</th>
+                                <th scope="col">Recipient Name</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Division</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <script src="{{ url_for('static', path='js/bootstraps/bootstrap.min.js') }}"></script>
+    </body>
+</html>

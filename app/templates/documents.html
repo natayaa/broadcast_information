@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title></title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+        <link rel="stylesheet" href="{{ url_for('static', path='css/bootstraps/bootstrap.min.css') }}" />
+        <link rel="stylesheet" href="{{ url_for('static', path='css/bootstraps/bootstrap.css') }}" />
+    </head>
+    <body class="bg-transparent">
+        <div class="container-fluid">
+            <nav class="navbar navbar-expand-lg navbar-light">
+                <a href="/app/" class="navbar-brand">
+                    <img src="{{ url_for('static', path='/assets/images/brand.png') }}" height="35px;">
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#documentsnavbar" aria-controls="documentsnavbar"
+                    aria-expanded="false">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="documentsnavbar">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link mx-2 active" aria-current="page" href="#">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link mx-2" href="#">Register Document</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link mx-2" href="#">Upload Documents</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link mx-2" href="#">Register Recipient</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Table Contents -->
+            <main class="flex-lg-shrink-0">
+                <section class="vh-100" style="background-color: rgb(117, 253, 244);">
+                    <div class="row justify-content-center">
+                        <div class="container-fluid" style="background-color: azure;">
+                            <div class="row d-flex justify-content-center align-items-center h-100">
+                                <div class="col col-xl-9">
+                                    <div class="input-group mb-3 justify-content-end">
+                                        <form action="" method="GET">
+                                            <div class="row mt-3">
+                                                <div class="col-md-10">
+                                                    <input type="text" id="searchbox" name="search" class="form-control" placeholder="Search box" value="">
+                                                    <button type="submit" class="btn btn-secondary">Search</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered align-middle mb-0 bg-white table-hover">
+                                            <thead class="bg-light text-center" style="position: sticky;">
+                                                <tr>
+                                                    <th>No</th>
+                                                    <th>Document no</th>
+                                                    <th>Type</th>
+                                                    <th>Subject</th>
+                                                    <th>Model</th>
+                                                    <th>Description</th>
+                                                    <th>Filename</th>
+                                                    <th>PIC</th>
+                                                </tr>
+                                            </thead>
+                                            <tbdody id="result">
+                                                
+                                                <tr>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>                                                   
+                                                </tr>
+                                            </tbdody>
+                                        </table>
+                                        <nav aria-label="page navigation">
+                                            <ul class="pagination justify-content-center">
+                                                
+                                                <li class="page-item">
+                                                    
+                                                </li>
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+
+        <script src="{{ url_for('static', path='js/bootstraps/bootstrap.min.js') }}"></script>
+
+    </body>
+</html>
