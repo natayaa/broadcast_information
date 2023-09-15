@@ -44,7 +44,7 @@
                                 <a class="nav-link" href="/app">Home</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="">Mail</a>
+                                <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#broadcastMail">Broadcast</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="/app/documents">Document list</a>
@@ -60,6 +60,26 @@
                 </div>
             </nav>
 
+            <!--div class="modal fade" id="broadcastMail" tabindex="-1" aria-labelledby="broadcastMailing" role="dialog" aria-hidden="true">
+                <div class="modal-dialog" role="dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="broadcastMailing">Broadcast the Report Mail</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="POST" action="#">
+                                <div class="mt-2">
+                                    <label for="documentNumber" class="form-label">Document Number</label>
+                                    <select id="documentNumber" class="form-select">
+                                    </select>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div-->
+
             <!-- MODAL Upload -->
             <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" role="dialog" aria-hidden="true">
                 <div class="modal-dialog" role="dialog">
@@ -69,7 +89,7 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form method="POST" action="#">
+                            <form method="POST" action="/app/document/upload/upload_report" enctype="multipart/form-data">
                                 <div class="mt-2">
                                     <label for="documentNo" class="form-label">Document Number</label>
                                     <input type="text" id="documentNo" class="form-control" >
@@ -107,7 +127,7 @@
                                     </select>   
                                 </div>
                                 <div class="mt-4">
-                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                    <button type="submit" class="btn btn-primary">Submit & Broadcast</button>
                                 </div>
                             </form>
                         </div>

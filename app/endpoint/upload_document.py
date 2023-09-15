@@ -1,5 +1,8 @@
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Request, Depends, UploadFile, File
 from fastapi.templating import Jinja2Templates
+from fastapi.responses import JSONResponse
+
+from database.schemas import uploadReportBroadcast
 
 upload_endpoint = APIRouter()
 templates = Jinja2Templates("templates/")
@@ -14,3 +17,11 @@ async def uploadEndpoint(request: Request):
                               "Marketing", "Accounting", "Costing", "Promotion", "PPC", "CMC", "Production Planning", "TV Director"]
     context = {"request": request, "document_type": document_type, "destination": send_to}
     return templates.TemplateResponse("upload_document.html", context=context)
+
+@upload_endpoint.post("/upload_report")
+async def uploadReportData(payload: uploadReportBroadcast.BroadcastReport = Depends(), file: UploadFile = File(...)):
+    print(payload)
+    if file:
+        with open(file.filename, "wb") as f:
+            f.write(file.file.read())
+    return JSONResponse(content={'message': 'form data procees successfully'})
