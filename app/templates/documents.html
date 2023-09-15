@@ -6,6 +6,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
         <link rel="stylesheet" href="{{ url_for('static', path='css/bootstraps/bootstrap.min.css') }}" />
         <link rel="stylesheet" href="{{ url_for('static', path='css/bootstraps/bootstrap.css') }}" />
+        <link rel="stylesheet" href="{{ url_for('static', path='css/main.css') }}" />
+        <link rel="stylesheet" href="{{ url_for('static', path='css/aos.css') }}" />
     </head>
     <body class="bg-transparent">
         <div class="container-fluid">
@@ -26,10 +28,7 @@
                             <a class="nav-link mx-2" href="#">Register Document</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link mx-2" href="#">Upload Documents</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link mx-2" href="#">Register Recipient</a>
+                            <a class="nav-link mx-2" href="/app/user/recipients">Register Recipient</a>
                         </li>
                     </ul>
                 </div>
@@ -52,6 +51,9 @@
                                             </div>
                                         </form>
                                     </div>
+                                    <div class="row justify-content-end ms-2 mb-2">
+                                        <button class="btn btn-warning" type="button" style="width: 25%;">Export as XLSX</button>
+                                    </div>
                                     <div class="table-responsive">
                                         <table class="table table-bordered align-middle mb-0 bg-white table-hover">
                                             <thead class="bg-light text-center" style="position: sticky;">
@@ -64,6 +66,7 @@
                                                     <th>Description</th>
                                                     <th>Filename</th>
                                                     <th>PIC</th>
+                                                    <th>Option</th>
                                                 </tr>
                                             </thead>
                                             <tbdody id="result">

@@ -6,6 +6,8 @@
         <title></title>
         <link rel="stylesheet" href="{{ url_for('static', path='css/bootstraps/bootstrap.min.css') }}" />
         <link rel="stylesheet" href="{{ url_for('static', path='css/bootstraps/bootstrap.css') }}" />
+        <link rel="stylesheet" href="{{ url_for('static', path='css/main.css') }}" />
+        <link rel="stylesheet" href="{{ url_for('static', path='css/bootstrap-icons.css') }}" />
     </head>
     <body class="bg-transparent">
         <div class="container-fluid">
@@ -30,6 +32,73 @@
                     </ul>
                 </div>
             </nav>
+            <div class="container">
+                <div class="row md-5 ms-5 mt-2 justify-content-center align-items-center">
+                    <h3><strong>Upload Document</strong></h3>
+                </div>
+                <div class="row md-5 ms-5 mt-4 justify-content-center align-items-center">
+                    <div class="col">
+                        <form method="POST" action="#">
+                            <div class="mt-2">
+                                <label for="documentNo" class="form-label">Document Number</label>
+                                <input type="text" id="documentNo" class="form-control" style="width: 45%;">
+                            </div>
+                            <div class="mt-2">
+                                <label for="documentType" class="form-label">Document Type</label>
+                                <select class="form-select" id="documentType" style="width: 45%;">
+                                    {% for type in document_type %}
+                                        <option value="{{ type }}">{{ type }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="mt-2">
+                                <label for="subjectDocument" class="form-label">Document Subject</label>
+                                <textarea class="form-control" id="subjectDocument" style="width: 45%;"></textarea>
+                            </div>
+                            <div class="mt-2">
+                                <label for="documentDesc" class="form-label">Document Description</label>
+                                <textarea class="form-control" id="documentDesc" style="width: 45%;"></textarea>
+                            </div>
+                            <div class="mt-2">
+                                <label for="model_tv" class="form-label">Model</label>
+                                <input type="text" class="form-control" id="model_tv" style="width: 45%;">
+                            </div>
+                            <div class="mt-2">
+                                <label for="uploadFile" class="form-label">Upload File</label>
+                                <input class="form-control form-control-sm" id="uploadFile" name="file" type="file" required style="width: 45%;">
+                            </div>
+                            <div class="mt-2">
+                                <label for="distributed_to" class="form-label">Distributed To</label>
+                                <select class="form-control" id="distributed_to" style="width: 45%;">
+                                    {% for dest in destination %}
+                                        <option value="{{ dest }}">{{ dest }}</option>
+                                    {% endfor %}
+                                </select>   
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="row">
+                    <br>
+                    <br>
+                </div>
+            </div>
         </div>
+        <footer class="site-footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <h5 class="text-white">
+                            <i class="bi-geo-alt-fill me-2"></i>
+                            PT SHARP Electronics Indonesia, TV Engineering
+                        </h5>
+                        <a href="mailto:tv_eng@seid.sharp-global.com" class="custom-link">tv_eng@seid.sharp-world.com</a>
+                    </div>
+                    <div class="col-6">
+                        <p class="copyright-text mb-0">Copyright © TV Engineering</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
     </body>
 </html>

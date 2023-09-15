@@ -6,5 +6,11 @@ templates = Jinja2Templates("templates/")
 
 @main_page.get("/")
 async def main_homepage(request: Request):
-    contexts = {"request": request}
-    return templates.TemplateResponse("main.html", context=contexts)
+    document_type = ["New Model Authorization", "New Model Information", "Part Evaluation", "ECN", "Technical report", "Study Report", "Mechanical Part Inspection Report", 
+                     "Drop Test Report", "Vibration Test Report", "Part Injection Approval", "General Inspection Report", "TV Check Sheets", "Home Theater Check Sheet", 
+                     "MM Part List", "MM Assembly 1", "MM Assembly 2", "MM Alignment/Adjustment", "Trial Run Evaluation", "New Model Trial Review", "FDRM", 
+                     "Mopdification Information", "Approval Spec", "Approval Letter", "Other"]
+    send_to =  ["Production Engineer", "Production", "QC Line", "PQA", "Procurement", "Service", "QRCC",
+                              "Marketing", "Accounting", "Costing", "Promotion", "PPC", "CMC", "Production Planning", "TV Director"]
+    context = {"request": request, "document_type": document_type, "destination": send_to}
+    return templates.TemplateResponse("main.html", context=context)

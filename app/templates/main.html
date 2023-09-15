@@ -50,7 +50,7 @@
                                 <a class="nav-link" href="/app/documents">Document list</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="/app/document/upload">Upload Document</a>
+                                <a class="nav-link" href="#" id="uploadModalLink" data-bs-toggle="modal" data-bs-target="#uploadModal">Upload Document</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="/app/user/recipients">Recipient</a>
@@ -59,6 +59,62 @@
                     </div>
                 </div>
             </nav>
+
+            <!-- MODAL Upload -->
+            <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" role="dialog" aria-hidden="true">
+                <div class="modal-dialog" role="dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="uploadModalLabel">Upload Document</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="POST" action="#">
+                                <div class="mt-2">
+                                    <label for="documentNo" class="form-label">Document Number</label>
+                                    <input type="text" id="documentNo" class="form-control" >
+                                </div>
+                                <div class="mt-2">
+                                    <label for="documentType" class="form-label">Document Type</label>
+                                    <select class="form-select" id="documentType" >
+                                        {% for type in document_type %}
+                                            <option value="{{ type }}">{{ type }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="mt-2">
+                                    <label for="subjectDocument" class="form-label">Document Subject</label>
+                                    <textarea class="form-control" id="subjectDocument" ></textarea>
+                                </div>
+                                <div class="mt-2">
+                                    <label for="documentDesc" class="form-label">Document Description</label>
+                                    <textarea class="form-control" id="documentDesc" ></textarea>
+                                </div>
+                                <div class="mt-2">
+                                    <label for="model_tv" class="form-label">Model</label>
+                                    <input type="text" class="form-control" id="model_tv" >
+                                </div>
+                                <div class="mt-2">
+                                    <label for="uploadFile" class="form-label">Upload File</label>
+                                    <input class="form-control form-control-sm" id="uploadFile" name="file" type="file" required >
+                                </div>
+                                <div class="mt-2">
+                                    <label for="distributed_to" class="form-label">Distributed To</label>
+                                    <select class="form-control" id="distributed_to" >
+                                        {% for dest in destination %}
+                                            <option value="{{ dest }}">{{ dest }}</option>
+                                        {% endfor %}
+                                    </select>   
+                                </div>
+                                <div class="mt-4">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </main>
         <footer class="site-footer">
             <div class="container">
@@ -76,6 +132,7 @@
                 </div>
             </div>
         </footer>
+        <script src="{{ url_for('static', path='js/bootstraps/bootstrap.bundle.min.js') }}"></script>
         <script src="{{ url_for('static', path='js/jquery.min.js') }}"></script>
         <script src="{{ url_for('static', path='js/aos.js') }}"></script>
         <script src="{{ url_for('static', path='js/custom.js') }}"></script>
@@ -83,5 +140,6 @@
         <script src="{{ url_for('static', path='js/jquery.magnific-popup.min.js') }}"></script>
         <script src="{{ url_for('static', path='js/magnific-popup-options.js') }}"></script>
         <script src="{{ url_for('static', path='js/scrollspy.min.js') }}"></script>
+        
     </body>
 </html>

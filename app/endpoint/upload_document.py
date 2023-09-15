@@ -10,5 +10,7 @@ async def uploadEndpoint(request: Request):
                      "Drop Test Report", "Vibration Test Report", "Part Injection Approval", "General Inspection Report", "TV Check Sheets", "Home Theater Check Sheet", 
                      "MM Part List", "MM Assembly 1", "MM Assembly 2", "MM Alignment/Adjustment", "Trial Run Evaluation", "New Model Trial Review", "FDRM", 
                      "Mopdification Information", "Approval Spec", "Approval Letter", "Other"]
-    context = {"request": request, "document_type": document_type}
+    send_to =  ["Production Engineer", "Production", "QC Line", "PQA", "Procurement", "Service", "QRCC",
+                              "Marketing", "Accounting", "Costing", "Promotion", "PPC", "CMC", "Production Planning", "TV Director"]
+    context = {"request": request, "document_type": document_type, "destination": send_to}
     return templates.TemplateResponse("upload_document.html", context=context)
