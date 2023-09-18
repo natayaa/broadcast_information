@@ -25,3 +25,5 @@ async def uploadReportData(payload: uploadReportBroadcast.BroadcastReport = Depe
         with open(file.filename, "wb") as f:
             f.write(file.file.read())
     return JSONResponse(content={'message': 'form data procees successfully'})
+
+## Broadcast function
