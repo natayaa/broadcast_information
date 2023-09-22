@@ -16,7 +16,7 @@ def ping_server(smtp_server, smtp_port):
         print(error_msg)
         return False
     
-def send_mail_notif(payload):
+def send_mail_notif(payload, sender_email, sender_pw):
     server_informations = list({"server": config("SMTP_SERVER_1"), "port": config("SMTP_SERVER_PORT_1"),
                                 "server": config("SMTP_SERVER_2"), "port": config("SMTP_SERVER_PORT_2")})
     

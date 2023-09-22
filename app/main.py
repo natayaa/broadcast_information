@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 
-from endpoint import main_page, document_list, register_recipient, upload_document
+from endpoint import main_page, document_list, register_recipient, upload_document, login
 from api import user_api
 
 broadcast_mailing = FastAPI()
@@ -15,3 +15,5 @@ broadcast_mailing.include_router(register_recipient.recipient, tags=["Recipient"
 broadcast_mailing.include_router(upload_document.upload_endpoint, tags=["Upload Document"], prefix="/app/document/upload")
 
 broadcast_mailing.include_router(user_api.users_api, tags=["Users Related"], prefix="/app/users")
+
+broadcast_mailing.include_router(login.login_api, tags=['Login'], prefix="/app/login")

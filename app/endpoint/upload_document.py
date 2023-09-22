@@ -21,6 +21,10 @@ async def uploadEndpoint(request: Request):
 @upload_endpoint.post("/upload_report")
 async def uploadReportData(payload: uploadReportBroadcast.BroadcastReport = Depends(), file: UploadFile = File(...)):
     print(payload)
+    # check user login
+    # if login, grab the necessary information like outlook email and it's password
+    # else
+    # return some kind of data that user isn't logged in
     if file:
         with open(file.filename, "wb") as f:
             f.write(file.file.read())
