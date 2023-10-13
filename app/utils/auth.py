@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 from typing import Union, Any
 from jose import jwt
 
+
 class Tokenize:
     def __init__(self):
         pass

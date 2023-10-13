@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title></title>
+        <title>{{ title }}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
         <link rel="stylesheet" href="{{ url_for('static', path='css/bootstraps/bootstrap.min.css') }}" />
         <link rel="stylesheet" href="{{ url_for('static', path='css/bootstraps/bootstrap.css') }}" />
@@ -24,12 +24,6 @@
                         <li class="nav-item">
                             <a class="nav-link mx-2 active" aria-current="page" href="#">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link mx-2" href="#">Register Document</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link mx-2" href="/app/user/recipients">Register Recipient</a>
-                        </li>
                     </ul>
                 </div>
             </nav>
@@ -40,21 +34,11 @@
                     <div class="row justify-content-center">
                         <div class="container-fluid" style="background-color: azure;">
                             <div class="row d-flex justify-content-center align-items-center h-100">
-                                <div class="col col-xl-9">
-                                    <div class="input-group mb-3 justify-content-end">
-                                        <form action="" method="GET">
-                                            <div class="row mt-3">
-                                                <div class="col-md-10">
-                                                    <input type="text" id="searchbox" name="search" class="form-control" placeholder="Search box" value="">
-                                                    <button type="submit" class="btn btn-secondary">Search</button>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
+                                <div class="mb-3 mt-3">
                                     <div class="row justify-content-end ms-2 mb-2">
                                         <button class="btn btn-warning" type="button" style="width: 25%;">Export as XLSX</button>
                                     </div>
-                                    <div class="table-responsive">
+                                    <div class="table-responsive mt-4 mb-4">
                                         <table class="table table-bordered align-middle mb-0 bg-white table-hover">
                                             <thead class="bg-light text-center" style="position: sticky;">
                                                 <tr>
@@ -69,29 +53,39 @@
                                                     <th>Option</th>
                                                 </tr>
                                             </thead>
-                                            <tbdody id="result">
-                                                
+                                            <tbdody></tbdody>
+                                                {% for document in recorded_documents %}
                                                 <tr>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>                                                   
+                                                    <td class="text-center">{{ document.id }}</td>     
+                                                    <td class="text-center">{{ document.document_no }}</td>
+                                                    <td class="text-center">{{ document.document_type }}</td>
+                                                    <td class="text-center">{{ document.document_subject }}</td> 
+                                                    <td class="text-center">{{ document.document_description }}</td>
+                                                    <td class="text-center">{{ document.model_tv }}</td>          
+                                                    <td class="text-center"><a href="/app/documents/serverfile/dynamic/api/{{ document.document_no }}" target="_blank">{{ document.filename }}</a></td>
+                                                    <td class="text-center">{{ document.uploader }}</td>                     
                                                 </tr>
+                                                {% endfor %}
                                             </tbdody>
                                         </table>
-                                        <nav aria-label="page navigation">
-                                            <ul class="pagination justify-content-center">
-                                                
-                                                <li class="page-item">
-                                                    
-                                                </li>
-                                            </ul>
-                                        </nav>
                                     </div>
+                                    <nav aria-label="Pagination">
+                                        <ul class="pagination justify-content-center">
+                                            {% if page > 1 %}
+                                            <li class="page-item"><a class="page-link" href="/app/documents/?page={{ page - 1 }}&perpage={{ limit }}">Previous</a></li>
+                                            {% endif %}
+
+                                            {% for page_num in range(1, total_pages + 1) %}
+                                            <li class="page-item {% if page == page_num %}active{% endif %}">
+                                                <a class="page-link" href="/app/documents/?page={{ page_num }}&perpage={{ limit }}">{{ page_num }}</a>
+                                            </li>
+                                            {% endfor %}
+
+                                            {% if page < total_pages %}
+                                            <li class="page-item"><a class="page-link" href="/app/documents/?page={{ page + 1 }}&perpage={{ limit }}">Next</a></li>
+                                            {% endif %}
+                                        </ul>
+                                    </nav>
                                 </div>
                             </div>
                         </div>

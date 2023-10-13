@@ -38,14 +38,14 @@
                 </div>
                 <div class="row md-5 ms-5 mt-4 justify-content-center align-items-center">
                     <div class="col">
-                        <form method="POST" action="#" enctype="multipart/form-data">
+                        <form method="POST" action="/app/document/upload/upload_report" enctype="multipart/form-data">
                             <div class="mt-2">
                                 <label for="documentNo" class="form-label">Document Number</label>
-                                <input type="text" id="documentNo" class="form-control" style="width: 45%;">
+                                <input type="text" id="documentNo" name="documentNo" class="form-control" style="width: 45%;">
                             </div>
                             <div class="mt-2">
                                 <label for="documentType" class="form-label">Document Type</label>
-                                <select class="form-select" id="documentType" style="width: 45%;">
+                                <select class="form-select" id="documentType" name="documentType" style="width: 45%;">
                                     {% for type in document_type %}
                                         <option value="{{ type }}">{{ type }}</option>
                                     {% endfor %}
@@ -53,15 +53,15 @@
                             </div>
                             <div class="mt-2">
                                 <label for="subjectDocument" class="form-label">Document Subject</label>
-                                <textarea class="form-control" id="subjectDocument" style="width: 45%;"></textarea>
+                                <textarea class="form-control" id="subjectDocument" name="subjectDocument" style="width: 45%;"></textarea>
                             </div>
                             <div class="mt-2">
                                 <label for="documentDesc" class="form-label">Document Description</label>
-                                <textarea class="form-control" id="documentDesc" style="width: 45%;"></textarea>
+                                <textarea class="form-control" id="documentDesc" name="documentDesc" style="width: 45%;"></textarea>
                             </div>
                             <div class="mt-2">
                                 <label for="model_tv" class="form-label">Model</label>
-                                <input type="text" class="form-control" id="model_tv" style="width: 45%;">
+                                <input type="text" class="form-control" id="model_tv" name="m_tv_broad" style="width: 45%;">
                             </div>
                             <div class="mt-2">
                                 <label for="uploadFile" class="form-label">Upload File</label>
@@ -77,10 +77,6 @@
                             </div>
                         </form>
                     </div>
-                </div>
-                <div class="row">
-                    <br>
-                    <br>
                 </div>
             </div>
         </div>

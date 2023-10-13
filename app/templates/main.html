@@ -5,13 +5,13 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="">
         <meta name="author" content="Ivan Azhari:">
-        <title></title>
+        <title>{{ title }}</title>
         <link rel="stylesheet" href="{{ url_for('static', path='css/bootstraps/bootstrap.min.css') }}" />
         <link rel="stylesheet" href="{{ url_for('static', path='css/bootstrap-icons.css') }}" />
         <link rel="stylesheet" href="{{ url_for('static', path='css/magnific-popup.css') }}" />
         <link rel="stylesheet" href="{{ url_for('static', path='css/aos.css') }}" />
         <link rel="stylesheet" href="{{ url_for('static', path='css/main.css') }}" />
-        <link rel="stylesheet" href="{{ url_for('static', path='css/bootstraps/bootstrap-multiselect.css') }}" />   
+        <link rel="stylesheet" href="{{ url_for('static', path='css/bootstraps/bootstrap-select.css') }}" />
     </head>
     <body>
         <main>
@@ -45,7 +45,7 @@
                                 <a class="nav-link" href="/app">Home</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#broadcastMail">Broadcast</a>
+                                <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#broadcastMail" id="broadcastInit">Broadcast</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="/app/documents">Document list</a>
@@ -61,25 +61,46 @@
                 </div>
             </nav>
 
-            <!--div class="modal fade" id="broadcastMail" tabindex="-1" aria-labelledby="broadcastMailing" role="dialog" aria-hidden="true">
+            <div class="modal fade" id="broadcastMail" tabindex="-1" aria-labelledby="broadcastMailing" role="dialog" aria-hidden="true">
                 <div class="modal-dialog" role="dialog">
                     <div class="modal-content">
-                        <div class="modal-header">
+                        <div class="modal-header text-center">
                             <h5 class="modal-title" id="broadcastMailing">Broadcast the Report Mail</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form method="POST" action="#">
+                            <form id="broadcastForm">
                                 <div class="mt-2">
                                     <label for="documentNumber" class="form-label">Document Number</label>
-                                    <select id="documentNumber" class="form-select">
+                                    <select id="documentNumber" class="form-select" name="documentNumbb">
                                     </select>
                                 </div>
+                                <div class="mt-2">                                    
+                                    <p>Detail Information</p>
+                                    <ul id="selectedDocumentDetail">
+                                    </ul>
+                                </div>
+                                <div class="mt-2" style="display: none;">
+                                    <ul id="recipients_category">
+                                        
+                                    </ul>
+                                </div>
+                                <div class="mt-3 mb-4">
+                                    <label for="serverpick" class="form-label">Using Server Gateway</label>
+                                    <select class="form-select" id="serverpick">
+                                        <option value="{{ sharp_relay_server }}">{{ sharp_relay_server }}</option>
+                                        <option value="{{ office_relay_server }}">{{ office_relay_server }}</option>
+                                    </select>
+                                </div>
+                                <button class="btn btn-primary mt-3 text-center py-2" type="submit">Broadcast</button>
                             </form>
+                            <div class="mt-2">
+                                <p style="color: rgb(203, 26, 26);">{{ server_response }}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div-->
+            </div>
 
             <!-- MODAL Upload -->
             <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" role="dialog" aria-hidden="true">
@@ -93,11 +114,11 @@
                             <form method="POST" action="/app/document/upload/upload_report" enctype="multipart/form-data">
                                 <div class="mt-2">
                                     <label for="documentNo" class="form-label">Document Number</label>
-                                    <input type="text" id="documentNo" class="form-control" >
+                                    <input type="text" id="documentNo" name="documentNo" class="form-control">
                                 </div>
                                 <div class="mt-2">
                                     <label for="documentType" class="form-label">Document Type</label>
-                                    <select class="form-select" id="documentType" >
+                                    <select class="form-select" id="documentType" name="documentType">
                                         {% for type in document_type %}
                                             <option value="{{ type }}">{{ type }}</option>
                                         {% endfor %}
@@ -105,32 +126,35 @@
                                 </div>
                                 <div class="mt-2">
                                     <label for="subjectDocument" class="form-label">Document Subject</label>
-                                    <textarea class="form-control" id="subjectDocument" ></textarea>
+                                    <textarea class="form-control" id="subjectDocument" name="subjectDocument"></textarea>
                                 </div>
                                 <div class="mt-2">
                                     <label for="documentDesc" class="form-label">Document Description</label>
-                                    <textarea class="form-control" id="documentDesc" ></textarea>
+                                    <textarea class="form-control" id="documentDesc" name="documentDesc"></textarea>
                                 </div>
                                 <div class="mt-2">
                                     <label for="model_tv" class="form-label">Model</label>
-                                    <input type="text" class="form-control" id="model_tv" >
+                                    <input type="text" class="form-control" id="model_tv" name="m_tv_broad">
                                 </div>
                                 <div class="mt-2">
-                                    <label for="uploadFile" class="form-label">Upload File</label>
-                                    <input class="form-control form-control-sm" id="uploadFile" name="file" type="file" required >
+                                    <label for="uploadFile" class="form-label">Upload File (PDF Only)</label>
+                                    <input class="form-control form-control-sm" id="uploadFile" name="filenameUpload" type="file" accept="application/pdf">
                                 </div>
                                 <div class="mt-2">
                                     <label for="distributed_to" class="form-label">Distributed To</label>
-                                    <select class="selectpicker" id="distributed_to" multiple data-live-search="true">
+                                    <select class="selectpicker" multiple id="distributed_to" name="distributed_to">
                                         {% for dest in destination %}
                                             <option value="{{ dest }}">{{ dest }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
-                                <div class="mt-4">
-                                    <button type="submit" class="btn btn-primary">Submit & Broadcast</button>
+                                <div class="mt-2">
+                                    <p style="color: red" name="resultUpload">{{ message }}</p>
                                 </div>
-                            </form>
+                                <div class="mt-4">
+                                    <button type="submit" class="btn btn-primary">Submit to Server</button>
+                                </div>
+                            </form>                            
                         </div>
                     </div>
                 </div>
@@ -161,6 +185,14 @@
         <script src="{{ url_for('static', path='js/jquery.magnific-popup.min.js') }}"></script>
         <script src="{{ url_for('static', path='js/magnific-popup-options.js') }}"></script>
         <script src="{{ url_for('static', path='js/scrollspy.min.js') }}"></script>
-        <script src="{{ url_for('static', path='js/bootstrap-multiselect.js') }}"></script>
+        <script src="{{ url_for('static', path='js/bootstraps/bootstrap-select.js') }}"></script>
+        <script src="{{ url_for('static', path='js/broadcast_doc.js') }}"></script>
+        <script>
+            const documentNumber = document.getElementById("broadcastInit");
+            documentNumber.addEventListener("click", populateDocumentNumber);
+
+            const gg = document.getElementById("distributed_to");
+            console.log(gg);
+        </script>
     </body>
 </html>

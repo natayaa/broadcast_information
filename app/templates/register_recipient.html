@@ -3,14 +3,14 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-        <title></title>
+        <title>{{ title }}</title>
         <link rel="stylesheet" href="{{ url_for('static', path='css/bootstraps/bootstrap.min.css') }}" />
         <link rel="stylesheet" href="" />
     </head>
     <body class="bg-transparent">
         <div class="container-fluid">
             <nav class="navbar navbar-expand-lg navbar-light">
-                <a href="/app" class="navbar-brand">
+                <a href="/" class="navbar-brand">
                     <img src="{{ url_for('static', path='assets/images/brand.png') }}" height="35px;">
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#registerNavbar"
@@ -20,7 +20,7 @@
                 <div class="collapse navbar-collapse" id="registerNavbar">
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
-                            <a class="nav-link mx-2 active" href="/app">Home</a>
+                            <a class="nav-link mx-2 active" href="/">Home</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link mx-2" href="#">Register Document</a>
@@ -38,51 +38,74 @@
             </div>
             <div class="row md-5 ms-3 mt-4">
                 <div class="col-md-6 justify-content-center align-items-center">
-                    <div class="mt-2">
-                        <label for="recipientMail" class="form-label">Recipient Mail</label>
-                        <input id="recipientMail" class="form-control" style="width: 50%;">
-                    </div>
-                    <div class="mt-2">
-                        <label for="recipientName" class="form-label">Recipient Name</label>
-                        <input id="recipientName" class="form-control" style="width: 50%;">
-                    </div>
-                    <div class="mt-2">
-                        <label for="" class="form-label">Division</label>
-                        <select id="rDivision" class="form-select" style="width: 50%;" name="rDivision">
-                            {% for i in recipient_list %}
-                                <option value="{{ i }}">{{ i }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
+                    <form action="/app/user/recipients/" method="POST" id="recipientRegister">
+                        <div class="mt-2">
+                            <label for="recipientMail" class="form-label">Recipient Mail</label>
+                            <input id="recipientMail" name="recipientMail" class="form-control" style="width: 50%;" required>
+                        </div>
+                        <div class="mt-2">
+                            <label for="recipientName" class="form-label">Recipient Name</label>
+                            <input id="recipientName" name="recipientName" class="form-control" style="width: 50%;" required>
+                        </div>
+                        <div class="mt-2">
+                            <label for="" class="form-label">Division</label>
+                            <select id="rDivision" name="rDivision" class="form-select" style="width: 50%;" name="rDivision" required>
+                                {% for i in recipient_list %}
+                                    <option value="{{ i }}">{{ i }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-3">Submit Recipient</button>
+                    </form>
+                    <p id="result" class="mt-2" style="color: red;">{{ message }}</p>
                 </div>
                 <div class="col-md-6 justify-content-center align-items-center">
                     <div class="row md-5">
                         <h3><strong>List of Available Recipients</strong></h3>
                     </div>
-                    <div class="row">
-                        <div class="mt-2">
-                            <input class="form-control" style="width: 45%;" placeholder="Search">
-                        </div>
-                    </div>
                     <table class="table align-middle mt-3">
                         <thead>
                             <tr>
-                                <th scope="col">No</th>
-                                <th scope="col">Recipient Name</th>
-                                <th scope="col">Email</th>
-                                <th scope="col">Division</th>
+                                <th class="col text-center">No</th>
+                                <th class="col text-center">Recipient Name</th>
+                                <th class="col text-center">Email</th>
+                                <th class="col text-center">Division</th>
                             </tr>
                         </thead>
                         <tbody>
+                            {% for recipient in registered_recipients %}
                             <tr>
-                                
+                                <td class="text-center">{{ recipient.id }}</td>
+                                <td class="text-center">{{ recipient.recipient_name }}</td>
+                                <td class="text-center">{{ recipient.recipient_mail }}</td>
+                                <td class="text-center">{{ recipient.recipient_division }}</td>
                             </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
+                    <nav aria-label="Pagination">
+                        <ul class="pagination justify-content-center">
+                            {% if page > 1 %}
+                            <li class="page-item"><a class="page-link" href="/app/user/recipients/?page={{ page - 1}}&perpage={{ limit }}">Previous</a></li>
+                            {% endif %}
+
+                            {% for page_num in range(1, total_pages + 1) %}
+                            <li class="page-item {% if page == page_num %}active{% endif %}">
+                                <a class="page-link" href="/app/user/recipients/?page={{ page_num }}&perpage={{ limit }}">{{ page_num }}</a>
+                            </li>
+                            {% endfor %}
+
+                            {% if page < total_pages %}
+                            <li class="page-item">
+                                <a class="page-link" href="/app/user/recipients/?page={{ page + 1}}^perpage={{ limite }}">Next</a>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
                 </div>
             </div>
         </div>
-        
+        <script src="{{ url_for('static', path='js/jquery.min.js') }}"></script>
         <script src="{{ url_for('static', path='js/bootstraps/bootstrap.min.js') }}"></script>
     </body>
 </html>
