@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Request, HTTPException, Query, BackgroundTasks
+from fastapi import status
 from fastapi.templating import Jinja2Templates
-from fastapi.responses import FileResponse, Response, StreamingResponse
+from fastapi.responses import FileResponse, Response, JSONResponse
 from tempfile import NamedTemporaryFile
 
 import io, tempfile, mimetypes
@@ -23,6 +24,19 @@ async def home_documents(request: Request, page: int = Query(1, alias='page'), l
     contexts.update({"total_pages": total_pages, "recorded_documents": serve_data})
     return templates.TemplateResponse("documents.html", context=contexts)
 
+## remove selected data
+@document_list_ep.delete("/api/data/document/registered/document_no={document_id}")
+async def delete_selected_record(document_id: int):
+    endpoint_retval = {"message": "", "docname": ""}
+    delete_data = await db_conn.delete_recorded_document(document_id=document_id)
+    if delete_data:
+        endpoint_retval.update({"message": "Selected data has been removed from database"})
+        return JSONResponse(content=endpoint_retval, status_code=status.HTTP_200_OK)
+    else:
+        endpoint_retval.update({"message": "Failed to delete selected data", "err_msg": delete_data})
+        return JSONResponse(content=endpoint_retval, status_code=status.HTTP_417_EXPECTATION_FAILED)
+
+
 @document_list_ep.get("/serverfile/dynamic/api/{document_no}")
 async def open_file_in_browser(document_no: str, background_task: BackgroundTasks):
     document = await db_conn.serve_document_blob(document_no=document_no)
@@ -32,7 +46,8 @@ async def open_file_in_browser(document_no: str, background_task: BackgroundTask
         file_data = document.filename_upload
         fileBuffer = io.BytesIO(file_data)
         background_task.add_task(fileBuffer.close)
-        return Response(fileBuffer.getvalue(), headers={"Content-Disposition": f'inline; filename="{document_no}.pdf'},
+        return Response(fileBuffer.getvalue(), headers={"Content-Disposition": f'inline; filename="{document_no}'},
                             media_type="application/pdf")
     
     raise HTTPException(status_code=404, detail="File not found")
+

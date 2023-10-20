@@ -44,8 +44,7 @@ async function populateDocumentNumber() {
 
 async function showDetailData(docnum) {
     const docDetail = document.getElementById("selectedDocumentDetail");
-    const ppRecipients = document.getElementById("recipients_category");
-
+    
     try {
         const response = await fetch(`/app/api/function/data/documents?document_number=${docnum}`);
         if (!response.ok) {
@@ -54,8 +53,6 @@ async function showDetailData(docnum) {
 
         const responseJson = await response.json();
         const contentData = responseJson.content_data;
-        const recipientList = responseJson.recipients;
-        console.log(recipientList);
         
         // Define labels for the keys
         const labels = {
@@ -76,6 +73,9 @@ async function showDetailData(docnum) {
         for (const key in labels) {
             if (labels.hasOwnProperty(key) && contentData[key]) {
                 const li = document.createElement("li");
+                if (key === "document_no") {
+                    li.id = "document_number_result";
+                }
                 li.textContent = `${labels[key]}: ${contentData[key]}`;
                 ul.appendChild(li);            
             }
@@ -89,7 +89,8 @@ async function showDetailData(docnum) {
 
 async function broadcast_mail() {
     const formbroadcast = document.getElementById("broadcastForm");
-    const buttonBroadcastMail = document.getElementById("broadcast_button");
+    const document_number = document.getElementById("document_number_result");
+    const new_document_number = document_number.textContent.replace(/^Document Number: /, '');
     const nfData = new FormData(formbroadcast);
 
     // Get the selected value from the "serverpick" select element
@@ -97,12 +98,12 @@ async function broadcast_mail() {
     const selectedServer = serverpick.options[serverpick.selectedIndex].value;
 
     // Add the selected server value to the FormData object
-    nfData.append("serverpick", selectedServer);
-
+    nfData.append("server_name", selectedServer);
+    nfData.append("document_number", new_document_number);
     try {
-        const response = await fetch(`/app/api/function/mailing/broadcast`, {
+        const response = await fetch(`/app/api/function/mailing/broadcast?document_number=${new_document_number}`, {
             method: "POST",
-            body: nfData,
+            body: nfData
         });
 
         if (response.ok) {

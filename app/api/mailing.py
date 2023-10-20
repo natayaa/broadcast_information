@@ -42,14 +42,14 @@ def send_mail_notif(payload, sender_email, sender_pw, server_name):
 
                 construct_mail = MIMEMultipart()
                 construct_mail['From'] = sender_email
-                construct_mail['To'] = ";".join(payload.recipient_list)
-                if payload.carbon_copy_mail:
-                    construct_mail['Cc'] = ";".join(payload.carbon_copy_mail)
-                construct_mail['Subject'] = "[Remainder]" + payload.subjectMail
-                construct_mail.attach(MIMEText(payload.mail_message, "plain"))
+                construct_mail['To'] = ";".join(payload.get("direct_mail"))
+                if payload.get("carbon_copy_mail"):
+                    construct_mail['Cc'] = ";".join(payload.get("carbon_copy_mail"))
+                construct_mail['Subject'] = "[Remainder]" + payload.get("mail_subject")
+                construct_mail.attach(MIMEText(payload.get("document_content"), "plain"))
 
                 # broadcast the mail
-                recipients = payload.recipient_list + (payload.carbon_copy_mail or []) 
+                recipients = payload.get("direct_mail") + (payload.get("carbon_copy_mail") or []) 
                 smtp_server.sendmail(sender_email, recipients, construct_mail.as_string())
             choosed_server.update({"info": "Message delivered"})
         except Exception as E:

@@ -8,6 +8,7 @@
         <link rel="stylesheet" href="{{ url_for('static', path='css/bootstraps/bootstrap.css') }}" />
         <link rel="stylesheet" href="{{ url_for('static', path='css/main.css') }}" />
         <link rel="stylesheet" href="{{ url_for('static', path='css/aos.css') }}" />
+        <link rel="stylesheet" href="{{ url_for('static', path='css/bootstrap-icons.css') }}" />
     </head>
     <body class="bg-transparent">
         <div class="container-fluid">
@@ -48,6 +49,7 @@
                                                         <th>Type</th>
                                                         <th>Model</th>
                                                         <th>More Information</th>
+                                                        <th>Option</th>
                                                 </thead>
                                                 <tbdody></tbdody>
                                                     {% for document in recorded_documents %}
@@ -56,7 +58,12 @@
                                                         <td class="text-center">{{ document.document_no }}</td>
                                                         <td class="text-center">{{ document.document_type }}</td>
                                                         <td class="text-center">{{ document.model_tv }}</td> 
-                                                        <td class="text-center"><button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tableModalInfo{{ document.id }}" aria-hidden="true">View More</button></td>                  
+                                                        <td class="text-center"><button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tableModalInfo{{ document.id }}" aria-hidden="true">View More</button></td>
+                                                        <td class="text-center">
+                                                            <button class="delete-document-btn btn btn-danger" document-data-id="{{ document.id }}" data-bs-target="#tableModalInfo{{ document.id }}">
+                                                                <i class="bi bi-trash"></i>
+                                                            </button>
+                                                        </td>
                                                     </tr>
                                                     {% endfor %}
                                                 </tbdody>
@@ -132,8 +139,32 @@
                 </section>
             </main>
         </div>
-
+        <script src="{{ url_for('static', path='js/jquery.min.js') }}"></script>
         <script src="{{ url_for('static', path='js/bootstraps/bootstrap.min.js') }}"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const delbut = document.querySelectorAll(".delete-document-btn");
+                delbut.forEach((button) => {
+                    button.addEventListener("click", async ()=> {
+                        const docId = button.getAttribute("document-data-id");
+                        // send a true delete request
+                        const responseServer = await fetch(`/app/documents/api/data/document/registered/document_no=${docId}`, {
+                            method: "DELETE",
+                        });
 
+                        if (responseServer.ok) {
+                            button.closest("tr").remove(); // you can update the UI or perform another action
+                            const data = await responseServer.json();
+                            alert(data.message);
+                        } else if (responseServer.status == 417) {
+                            const err = await responseServer.text();
+                            console.error("Failed to delete item", err);
+                        } else {
+                            console.error(await responseServer.text());
+                        }
+                    })
+                })
+            })
+        </script>
     </body>
 </html>

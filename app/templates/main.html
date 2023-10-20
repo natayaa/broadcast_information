@@ -87,7 +87,7 @@
                                         <option value="{{ office_relay_server }}">International Common Server</option>
                                     </select>
                                 </div>
-                                <button class="btn btn-primary mt-3 text-center py-2" type="button" id="broadcast_button">Broadcast</button>
+                                <button class="btn btn-primary mt-3 text-center py-2" type="button" id="broadcast_button" onclick="broadcast_mail();">Broadcast</button>
                             </form>
                             <div class="mt-2">
                                 <p style="color: rgb(203, 26, 26);" id="server_response">{{ server_response }}</p>
@@ -120,11 +120,11 @@
                                     </select>
                                 </div>
                                 <div class="mt-2">
-                                    <label for="subjectDocument" class="form-label">Document Subject</label>
+                                    <label for="subjectDocument" class="form-label">Mail Subject</label>
                                     <textarea class="form-control" id="subjectDocument" name="subjectDocument"></textarea>
                                 </div>
                                 <div class="mt-2">
-                                    <label for="documentDesc" class="form-label">Document Description</label>
+                                    <label for="documentDesc" class="form-label">Mail Content</label>
                                     <textarea class="form-control" id="documentDesc" name="documentDesc"></textarea>
                                 </div>
                                 <div class="mt-2">

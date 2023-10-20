@@ -20,7 +20,6 @@ class API_DB:
     async def get_documents_detail(self, document_number):
         qur = self.session.query(documents.documentsTable.document_no,
                                  documents.documentsTable.document_type,
-                                 documents.documentsTable.document_description,
                                  documents.documentsTable.model_tv,
                                  documents.documentsTable.datetime_upload,
                                  documents.documentsTable.distributed_to).filter(documents.documentsTable.document_no==document_number).first()
@@ -28,7 +27,6 @@ class API_DB:
             data = {
                 "document_no": qur.document_no,
                 "document_type": qur.document_type,
-                "document_description": qur.document_description,
                 "model_tv": qur.model_tv,
                 "datetime_upload": qur.datetime_upload,
                 "distributed_to": qur.distributed_to
@@ -66,10 +64,43 @@ class API_DB:
     async def read_documentdb(self, offset, limit):
         query = self.session.query(documents.documentsTable).offset(offset).limit(limit).all()
         return query
+    
+    async def get_detail_record_document(self, document_number):
+        query = self.session.query(documents.documentsTable.distributed_to,
+                                   documents.documentsTable.datetime_upload,
+                                   documents.documentsTable.document_no,
+                                   documents.documentsTable.document_type,
+                                   documents.documentsTable.document_description,
+                                   documents.documentsTable.model_tv, documents.documentsTable.uploader,
+                                   documents.documentsTable.document_subject,
+                                   documents.documentsTable.filename)
+        data = query.filter(documents.documentsTable.document_no == document_number).first()
+        container = {"document_number": data.document_no, "tv_model": data.model_tv,
+                     "document_type": data.document_type, "document_subject": data.document_subject,
+                     "document_description": data.document_description, "uploader_name": data.uploader,
+                     "document_filename": data.filename, "broadcast_to": data.distributed_to.split(";")}
+        if data:
+            return container
+        else:
+            return None
+            
+            
 
     def count_record_registered_documents(self) -> int:
         qq = self.session.query(documents.documentsTable).count()
         return qq
+    
+    async def delete_recorded_document(self, document_id):
+        try:
+            query = self.session.query(documents.documentsTable).filter(documents.documentsTable.id == document_id).first()
+            self.session.delete(query)
+            self.session.commit()
+            self.session.close()
+            return True
+        except IntegrityError as e:
+            self.session.rollback()
+            print(str(e))
+            return e
     
 
 from database.objectdb.recipients_obj import TableRecipients
@@ -105,7 +136,10 @@ class Recipients(API_DB):
         query = self.session.query(TableRecipients).count()
         return query
     
-    async def get_recipients_category(self, filted):
-        query = self.session.query(TableRecipients).filter(TableRecipients.recipient_division.in_(filted)).all()
-
-        return query
+    async def get_recipients_category_and_recipient_type(self, filted, type):
+        query = self.session.query(TableRecipients.recipient_mail).filter(TableRecipients.recipient_division.in_(filted), TableRecipients.recipient_category == type).all()
+        retv = [row[0] for row in query]
+        if retv:
+            return retv
+        else:
+            return None
