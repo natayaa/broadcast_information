@@ -84,6 +84,7 @@ class Recipients(API_DB):
             register_container.recipient_mail = payload.get("recipient_mail")
             register_container.recipient_name = payload.get("recipient_name")
             register_container.recipient_division = payload.get("recipient_division")
+            register_container.recipient_category = payload.get("recipient_category")
             self.session.add(register_container)
             self.session.commit()
             self.session.close()
@@ -106,5 +107,5 @@ class Recipients(API_DB):
     
     async def get_recipients_category(self, filted):
         query = self.session.query(TableRecipients).filter(TableRecipients.recipient_division.in_(filted)).all()
-        
+
         return query

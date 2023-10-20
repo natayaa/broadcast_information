@@ -80,22 +80,17 @@
                                     <ul id="selectedDocumentDetail">
                                     </ul>
                                 </div>
-                                <div class="mt-2" style="display: none;">
-                                    <ul id="recipients_category">
-                                        
-                                    </ul>
-                                </div>
                                 <div class="mt-3 mb-4">
                                     <label for="serverpick" class="form-label">Using Server Gateway</label>
-                                    <select class="form-select" id="serverpick">
-                                        <option value="{{ sharp_relay_server }}">{{ sharp_relay_server }}</option>
-                                        <option value="{{ office_relay_server }}">{{ office_relay_server }}</option>
+                                    <select class="form-select" id="serverpick" name="server_name">
+                                        <option value="{{ sharp_relay_server }}">Internal SHARP Relay Server</option>
+                                        <option value="{{ office_relay_server }}">International Common Server</option>
                                     </select>
                                 </div>
-                                <button class="btn btn-primary mt-3 text-center py-2" type="submit">Broadcast</button>
+                                <button class="btn btn-primary mt-3 text-center py-2" type="button" id="broadcast_button">Broadcast</button>
                             </form>
                             <div class="mt-2">
-                                <p style="color: rgb(203, 26, 26);">{{ server_response }}</p>
+                                <p style="color: rgb(203, 26, 26);" id="server_response">{{ server_response }}</p>
                             </div>
                         </div>
                     </div>
@@ -190,9 +185,6 @@
         <script>
             const documentNumber = document.getElementById("broadcastInit");
             documentNumber.addEventListener("click", populateDocumentNumber);
-
-            const gg = document.getElementById("distributed_to");
-            console.log(gg);
         </script>
     </body>
 </html>

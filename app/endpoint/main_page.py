@@ -30,7 +30,9 @@ async def main_homepage(request: Request):
 @main_page.post("/app/api/function/mailing/broadcast")
 async def broadcast_mail(MailContainer: MailContainerBody):
 
+    # sending 
     sendtest = send_mail_notif(payload=MailContainer, sender_email=config("SMTP_SENDER"), sender_pw=config("SMTP_SENDER_PW"), server_name=MailContainer.server_name)
+
     return JSONResponse(content=sendtest)
 
 @main_page.get("/app/api/function/data")
@@ -54,11 +56,11 @@ async def get_listing_data():
 @main_page.get("/app/api/function/data/documents")
 async def get_documentNumber(document_number: str):
     container = await db_conn.get_documents_detail(document_number=document_number)
-    distribute_to = container.get("distributed_to")
-    list_recipients_division = distribute_to.split(";")
     
-    data_content = {"content_data": container, "response_server": ""}
+    data_content = {"content_data": container, "response_server": "", "recipients": None}
     if container:
+        distribute_to = container.get("distributed_to")
+        list_recipients_division = distribute_to.split(";")
         # get list of recipients based on division from database 
         get_recipients_by_category = await get_recipient.get_recipients_category(filted=list_recipients_division)
         recipients_lists = [x.recipient_mail for x in get_recipients_by_category]

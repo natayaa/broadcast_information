@@ -38,54 +38,93 @@
                                     <div class="row justify-content-end ms-2 mb-2">
                                         <button class="btn btn-warning" type="button" style="width: 25%;">Export as XLSX</button>
                                     </div>
-                                    <div class="table-responsive mt-4 mb-4">
-                                        <table class="table table-bordered align-middle mb-0 bg-white table-hover">
-                                            <thead class="bg-light text-center" style="position: sticky;">
-                                                <tr>
-                                                    <th>No</th>
-                                                    <th>Document no</th>
-                                                    <th>Type</th>
-                                                    <th>Subject</th>
-                                                    <th>Model</th>
-                                                    <th>Description</th>
-                                                    <th>Filename</th>
-                                                    <th>PIC</th>
-                                                    <th>Option</th>
-                                                </tr>
-                                            </thead>
-                                            <tbdody></tbdody>
-                                                {% for document in recorded_documents %}
-                                                <tr>
-                                                    <td class="text-center">{{ document.id }}</td>     
-                                                    <td class="text-center">{{ document.document_no }}</td>
-                                                    <td class="text-center">{{ document.document_type }}</td>
-                                                    <td class="text-center">{{ document.document_subject }}</td> 
-                                                    <td class="text-center">{{ document.document_description }}</td>
-                                                    <td class="text-center">{{ document.model_tv }}</td>          
-                                                    <td class="text-center"><a href="/app/documents/serverfile/dynamic/api/{{ document.document_no }}" target="_blank">{{ document.filename }}</a></td>
-                                                    <td class="text-center">{{ document.uploader }}</td>                     
-                                                </tr>
+                                    <div class="container-fluid">
+                                        <div class="table-responsive mt-4 mb-4">
+                                            <table class="table table-bordered align-middle mb-0 bg-white table-hover">
+                                                <thead class="bg-light text-center" style="position: sticky;">
+                                                    <tr>
+                                                        <th>No</th>
+                                                        <th>Document no</th>
+                                                        <th>Type</th>
+                                                        <th>Model</th>
+                                                        <th>More Information</th>
+                                                </thead>
+                                                <tbdody></tbdody>
+                                                    {% for document in recorded_documents %}
+                                                    <tr>
+                                                        <td class="text-center">{{ document.id }}</td>     
+                                                        <td class="text-center">{{ document.document_no }}</td>
+                                                        <td class="text-center">{{ document.document_type }}</td>
+                                                        <td class="text-center">{{ document.model_tv }}</td> 
+                                                        <td class="text-center"><button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tableModalInfo{{ document.id }}" aria-hidden="true">View More</button></td>                  
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbdody>
+                                            </table>
+                                        </div>
+                                        {% for item in recorded_documents %}
+                                            {% if item %}
+                                            <div class="modal fade" id="tableModalInfo{{ item.id }}" tabindex="-1" aria-labelledby="tableModalInfo{{ item.id }}" aria-hidden="true">
+                                                <div class="modal-dialog modal-lg">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="tableModalInfo{{ item.id }}">Detail Information</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body" style="max-height: 300px; overflow-y: auto;">
+                                                            <table class="table table-bordered table-hover vertical-table">
+                                                                <tbody class="text-center">
+                                                                    <tr>
+                                                                        <th>Mail Subject</th>
+                                                                        <td>{{ item.document_subject }}</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th>Mail Content</th>
+                                                                        <td>{{ item.document_description }}</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th>Recipient Dept</th>
+                                                                        <td>{{ item.distributed_to }}</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th>Filename</th>
+                                                                        <td><a href="/app/documents/serverfile/dynamic/api/{{ item.document_no }}" target="_blank">{{ item.filename }}</a></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th>Uploader</th>
+                                                                        <td>{{ item.uploader }}</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th>Upload Date</th>
+                                                                        <td>{{ item.datetime_upload }}</td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                            
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                        <nav aria-label="Pagination">
+                                            <ul class="pagination justify-content-center">
+                                                {% if page > 1 %}
+                                                <li class="page-item"><a class="page-link" href="/app/documents/?page={{ page - 1 }}&perpage={{ limit }}">Previous</a></li>
+                                                {% endif %}
+    
+                                                {% for page_num in range(1, total_pages + 1) %}
+                                                <li class="page-item {% if page == page_num %}active{% endif %}">
+                                                    <a class="page-link" href="/app/documents/?page={{ page_num }}&perpage={{ limit }}">{{ page_num }}</a>
+                                                </li>
                                                 {% endfor %}
-                                            </tbdody>
-                                        </table>
+    
+                                                {% if page < total_pages %}
+                                                <li class="page-item"><a class="page-link" href="/app/documents/?page={{ page + 1 }}&perpage={{ limit }}">Next</a></li>
+                                                {% endif %}
+                                            </ul>
+                                        </nav>
                                     </div>
-                                    <nav aria-label="Pagination">
-                                        <ul class="pagination justify-content-center">
-                                            {% if page > 1 %}
-                                            <li class="page-item"><a class="page-link" href="/app/documents/?page={{ page - 1 }}&perpage={{ limit }}">Previous</a></li>
-                                            {% endif %}
-
-                                            {% for page_num in range(1, total_pages + 1) %}
-                                            <li class="page-item {% if page == page_num %}active{% endif %}">
-                                                <a class="page-link" href="/app/documents/?page={{ page_num }}&perpage={{ limit }}">{{ page_num }}</a>
-                                            </li>
-                                            {% endfor %}
-
-                                            {% if page < total_pages %}
-                                            <li class="page-item"><a class="page-link" href="/app/documents/?page={{ page + 1 }}&perpage={{ limit }}">Next</a></li>
-                                            {% endif %}
-                                        </ul>
-                                    </nav>
                                 </div>
                             </div>
                         </div>

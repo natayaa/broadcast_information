@@ -1,7 +1,6 @@
 async function populateDocumentNumber() {
     try {
         const documentNumber = document.getElementById("documentNumber");
-
         // Send an AJAX request to fetch the data
         const response = await fetch('/app/api/function/data');
         if (!response.ok) {
@@ -69,7 +68,7 @@ async function showDetailData(docnum) {
 
         // Clear existing content in docDetail
         docDetail.innerHTML = "";
-
+        
         // Create an unordered list (ul)
         const ul = document.createElement("ul");
 
@@ -78,12 +77,44 @@ async function showDetailData(docnum) {
             if (labels.hasOwnProperty(key) && contentData[key]) {
                 const li = document.createElement("li");
                 li.textContent = `${labels[key]}: ${contentData[key]}`;
-                ul.appendChild(li);
+                ul.appendChild(li);            
             }
         }
         // Append the ul to the docDetail element
         docDetail.appendChild(ul);
     } catch (error) {
         console.error(error);
+    }
+}
+
+async function broadcast_mail() {
+    const formbroadcast = document.getElementById("broadcastForm");
+    const buttonBroadcastMail = document.getElementById("broadcast_button");
+    const nfData = new FormData(formbroadcast);
+
+    // Get the selected value from the "serverpick" select element
+    const serverpick = document.getElementById("serverpick");
+    const selectedServer = serverpick.options[serverpick.selectedIndex].value;
+
+    // Add the selected server value to the FormData object
+    nfData.append("serverpick", selectedServer);
+
+    try {
+        const response = await fetch(`/app/api/function/mailing/broadcast`, {
+            method: "POST",
+            body: nfData,
+        });
+
+        if (response.ok) {
+            const data = await response.json(); // You may use .text() if the response is not JSON
+            // Handle the successful response data here
+            console.log(data);
+        } else {
+            // Handle errors, for example:
+            console.error("Error in the request. Status: " + response.status);
+        }
+    } catch (error) {
+        // Handle network or other errors
+        console.error("An error occurred:", error);
     }
 }

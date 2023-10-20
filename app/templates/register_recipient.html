@@ -48,11 +48,18 @@
                             <input id="recipientName" name="recipientName" class="form-control" style="width: 50%;" required>
                         </div>
                         <div class="mt-2">
-                            <label for="" class="form-label">Division</label>
+                            <label for="rDivision" class="form-label">Division</label>
                             <select id="rDivision" name="rDivision" class="form-select" style="width: 50%;" name="rDivision" required>
                                 {% for i in recipient_list %}
                                     <option value="{{ i }}">{{ i }}</option>
                                 {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mt-2">
+                            <label for="recipient_category" class="form-label">Direct or CC</label>
+                            <select id="recipient_category" name="recipient_category" class="form-select" style="width: 50%;" required>
+                                <option value="Direct">Direct</option>
+                                <option value="CC">CC</option>
                             </select>
                         </div>
                         <button type="submit" class="btn btn-primary mt-3">Submit Recipient</button>

@@ -8,3 +8,4 @@ class TableRecipients(Base):
     recipient_mail = Column(String)
     recipient_name = Column(String)
     recipient_division = Column(String)
+    recipient_category = Column(String)
