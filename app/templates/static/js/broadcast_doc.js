@@ -98,7 +98,7 @@ async function broadcast_mail() {
     const selectedServer = serverpick.options[serverpick.selectedIndex].value;
 
     // Add the selected server value to the FormData object
-    nfData.append("server_name", selectedServer);
+    nfData.append("smtp_server_name", selectedServer);
     nfData.append("document_number", new_document_number);
     try {
         const response = await fetch(`/app/api/function/mailing/broadcast?document_number=${new_document_number}`, {

@@ -20,4 +20,4 @@ broadcast_mailing.include_router(main_page.main_page, tags=["Home App"], prefix=
 broadcast_mailing.include_router(document_list.document_list_ep, tags=['Documents Table'], prefix=("/app/documents"))
 broadcast_mailing.include_router(register_recipient.recipient, tags=["Recipient"], prefix="/app/user/recipients")
 broadcast_mailing.include_router(upload_document.upload_endpoint, tags=["Upload Document"], prefix="/app/document/upload")
-broadcast_mailing.include_router(login.login_api, tags=['Login'], prefix="/app/login")
+broadcast_mailing.include_router(login.login_api, tags=['Login'], prefix="/app/users")

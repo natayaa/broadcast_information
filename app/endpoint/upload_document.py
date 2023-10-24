@@ -5,7 +5,7 @@ from decouple import config
 from typing import List
 import mimetypes
 
-from api.mailing import send_mail_notif, ping_server
+from api.mailing import send_mail_notif
 from database.api_db import API_DB
 
 

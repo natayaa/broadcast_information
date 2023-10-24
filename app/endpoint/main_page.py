@@ -30,13 +30,13 @@ async def main_homepage(request: Request):
 
 
 @main_page.post("/app/api/function/mailing/broadcast")
-async def broadcast_mail(request: Request, document_number: str, server_name: str = Form(...)):
+async def broadcast_mail(request: Request, document_number: str, smtp_server_name: str = Form(...)):
     # get document based on document_number
     
-    container = {} 
+    container = {"message": ""} 
     document_data = await db_conn.get_detail_record_document(document_number)
     # get recipient list 
-    uploaded_filename_hyperlink = f"http://{socket.gethostbyname(socket.gethostname())}:{request.client.port}/serverfile/dynamic/api/{document_number}"
+    uploaded_filename_hyperlink = f"http://{config('SERVER_APP_HOSTNAME')}:{config('SERVER_APP_PORT')}/app/documents/serverfile/dynamic/api/{document_number}"
     if document_data:
         departement_list = document_data.get("broadcast_to")
         # get list of all recipient of Direct mail and CC (Carbon Copy)
@@ -44,12 +44,14 @@ async def broadcast_mail(request: Request, document_number: str, server_name: st
         cc_recipients_list = ";".join(await get_recipient.get_recipients_category_and_recipient_type(departement_list, "CC"))
         container.update({"direct_mail": direct_recipients_list, "carbon_copy_mail": cc_recipients_list,
                           "mail_subject": document_data.get("document_subject"),
-                          "document_content": document_data.get("document_description") + f" You can find the file in this link : {uploaded_filename_hyperlink}"})
-        
-    # tinggal anggeuskeun engke ?
-    for item, l in container.items():
-        print(l)
-    return "OK"
+                          "document_content": document_data.get("document_description") + f" find the file in the link : {uploaded_filename_hyperlink}"})
+    else:
+        # for not found document
+        container.update({"message": "Selected document doesn't exists"})
+        return JSONResponse(content=container, status_code=status.HTTP_404_NOT_FOUND)
+    
+    
+
 
 @main_page.get("/app/api/function/data")
 async def get_listing_data():

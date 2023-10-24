@@ -105,7 +105,7 @@
                             <h5 class="modal-title" id="uploadModalLabel">Upload Document</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div class="modal-body">
+                        <div class="modal-body" style="max-height: 480px; overflow-y: auto;">
                             <form method="POST" action="/app/document/upload/upload_report" enctype="multipart/form-data">
                                 <div class="mt-2">
                                     <label for="documentNo" class="form-label">Document Number</label>
@@ -120,8 +120,8 @@
                                     </select>
                                 </div>
                                 <div class="mt-2">
-                                    <label for="subjectDocument" class="form-label">Mail Subject</label>
-                                    <textarea class="form-control" id="subjectDocument" name="subjectDocument"></textarea>
+                                    <label for="subjectDocument" class="form-label">Mail Title</label>
+                                    <input class="form-control" id="subjectDocument" name="subjectDocument">
                                 </div>
                                 <div class="mt-2">
                                     <label for="documentDesc" class="form-label">Mail Content</label>
