@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=-1">
+        <title>Unauthorized !</title>
+        <link rel="stylesheet" href="{{ url_for('static', path='css/bootstraps/bootstrap.min.css') }}" />
+    </head>
+    <body>
+        <div class="d-flex align-items-center justify-content-center vh-100">
+            <div class="text-center">
+                <h1 class="display-1 fw-bold">Unauthorized</h1>
+                <p class="fs-3"><span class="text-center">Oops</span> You are not log in</p>
+                <p class="lead">{{ message }}</p>
+                <a href="/app/users/" class="btn btn-primary">GO LOGIN</a>
+            </div>
+        </div>
+    </body>
+</html>

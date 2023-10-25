@@ -38,5 +38,5 @@ async def authentication_endpoint(form_data: Annotated[OAuth2PasswordRequestForm
     access_token_expires = timedelta(minutes=int(config("ACCESS_TOKEN_EXPIRE_MINUTES")))
 
     access_token = access_token = users.create_access_token_user(expires_date=access_token_expires, payload_user={"sub": user.username, "scopes": form_data.scopes})
-
+    
     return {"access_token": access_token, "token_type": "bearer"}

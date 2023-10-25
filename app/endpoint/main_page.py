@@ -1,11 +1,12 @@
-from fastapi import APIRouter, Request, status, HTTPException, Form
+from fastapi import APIRouter, Request, status, HTTPException, Form, Depends
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import JSONResponse, Response
 from decouple import config
-import socket
+from typing_extensions import Annotated
 
 from api.mailing import send_mail_notif
 from database.api_db import API_DB, Recipients
+from database.auth_db import oauth2_scheme
 
 main_page = APIRouter()
 templates = Jinja2Templates("templates/")
@@ -13,7 +14,7 @@ db_conn = API_DB()
 get_recipient = Recipients()
 
 @main_page.get("/")
-async def main_homepage(request: Request):
+async def main_homepage(request: Request, security_token: Annotated[str, Depends(oauth2_scheme)]):
     # call items list from database 
     document_type = ["New Model Authorization", "New Model Information", "Part Evaluation", "ECN", "Technical report", "Study Report", "Mechanical Part Inspection Report", 
                      "Drop Test Report", "Vibration Test Report", "Part Injection Approval", "General Inspection Report", "TV Check Sheets", "Home Theater Check Sheet", 
@@ -23,7 +24,7 @@ async def main_homepage(request: Request):
                               "Marketing", "Accounting", "Costing", "Promotion", "PPC", "CMC", "Production Planning", "TV Director"]
     context = {"request": request, "document_type": document_type, "destination": send_to, "title": "TV Engineers App",
                "sharp_relay_server": f"{config('SMTP_SERVER_1')}", "office_relay_server": f"{config('SMTP_SERVER_2')}"}
-
+    print(security_token)
 
     return templates.TemplateResponse("main.html", context=context)
 
@@ -54,7 +55,7 @@ async def broadcast_mail(request: Request, document_number: str, smtp_server_nam
 
 
 @main_page.get("/app/api/function/data")
-async def get_listing_data():
+async def get_listing_data(request: Request, security_token: Annotated[str, Depends(oauth2_scheme)]):
     try:
         registered_documents = await db_conn.get_listing_record()
         if registered_documents:
@@ -72,7 +73,7 @@ async def get_listing_data():
         raise HTTPException(status_code=500, detail=f"Internal Server Error: {str(e)}")
 
 @main_page.get("/app/api/function/data/documents")
-async def get_documentNumber(document_number: str):
+async def get_documentNumber(document_number: str, security_token: Annotated[str, Depends(oauth2_scheme)]):
     container = await db_conn.get_documents_detail(document_number=document_number)
     
     data_content = {"content_data": container, "response_server": "", "recipients": None}

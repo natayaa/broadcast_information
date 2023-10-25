@@ -16,6 +16,13 @@ async def page_not_found(request: Request, __):
                     "message2": "please go back to homepage."}
     return templates.TemplateResponse("404.html", context=content_page, status_code=status.HTTP_404_NOT_FOUND)
 
+@broadcast_mailing.exception_handler(status.HTTP_401_UNAUTHORIZED)
+async def handle_unauthorize(request: Request, __):
+    content_page = {"request": request, "message": "the page that you are looking need to be authorized first, so please log in.",
+                    "message2": "Go to Login page first"}
+    # create html page to handle this motherfucker unauthorize 
+    return templates.TemplateResponse("authorize.html", context=content_page)
+
 broadcast_mailing.include_router(main_page.main_page, tags=["Home App"], prefix="")
 broadcast_mailing.include_router(document_list.document_list_ep, tags=['Documents Table'], prefix=("/app/documents"))
 broadcast_mailing.include_router(register_recipient.recipient, tags=["Recipient"], prefix="/app/user/recipients")

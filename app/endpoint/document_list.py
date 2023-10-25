@@ -1,20 +1,20 @@
-from fastapi import APIRouter, Request, HTTPException, Query, BackgroundTasks
+from fastapi import APIRouter, Request, HTTPException, Query, BackgroundTasks, Depends
 from fastapi import status
 from fastapi.templating import Jinja2Templates
-from fastapi.responses import FileResponse, Response, JSONResponse
+from fastapi.responses import Response, JSONResponse
+from typing_extensions import Annotated
 from tempfile import NamedTemporaryFile
-
-import io, tempfile, mimetypes
-import urllib.parse
+import io
 
 from database.api_db import API_DB
+from database.auth_db import oauth2_scheme
 
 document_list_ep = APIRouter()
 templates = Jinja2Templates("templates/")
 db_conn = API_DB()
 
 @document_list_ep.get("/")
-async def home_documents(request: Request, page: int = Query(1, alias='page'), limit: int = Query(25, alias='perpage')):
+async def home_documents(request: Request, security_token: Annotated[str, Depends(oauth2_scheme)], page: int = Query(1, alias='page'), limit: int = Query(25, alias='perpage')):
     contexts = {"request": request, "page": page, "title": "Track Record Documents", "limit": limit}
     offset = (page - 1) * limit
     serve_data = await db_conn.read_documentdb(limit=limit, offset=offset)
@@ -26,7 +26,7 @@ async def home_documents(request: Request, page: int = Query(1, alias='page'), l
 
 ## remove selected data
 @document_list_ep.delete("/api/data/document/registered/document_no={document_id}")
-async def delete_selected_record(document_id: int):
+async def delete_selected_record(document_id: int, security_token: Annotated[str, Depends(oauth2_scheme)]):
     endpoint_retval = {"message": "", "docname": ""}
     delete_data = await db_conn.delete_recorded_document(document_id=document_id)
     if delete_data:
@@ -38,7 +38,7 @@ async def delete_selected_record(document_id: int):
 
 
 @document_list_ep.get("/serverfile/dynamic/api/{document_no}")
-async def open_file_in_browser(document_no: str, background_task: BackgroundTasks):
+async def open_file_in_browser(document_no: str, background_task: BackgroundTasks, security_token: Annotated[str, Depends(oauth2_scheme)]):
     document = await db_conn.serve_document_blob(document_no=document_no)
     
     if document:
