@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>{{ title }}</title>
+        <link rel="stylesheet" href="{{ url_for('static', path='css/bootstraps/bootstrap.min.css') }}" />
+        <link rel="stylesheet" href="{{ url_for('static', path='css/bootstrap-icons.css') }}" />
+        <style>
+            .divider:after,
+            .divider:before {
+            content: "";
+            flex: 1;
+            height: 1px;
+            }
+            .h-custom {
+                height: calc(100% - 73px);
+            }
+            @media (max-width: 450px) {
+                .h-custom {
+                    height: 100%;
+                }
+            }
+            body {                
+                background-image: url("{{ url_for('static', path='assets/images/login-bg.jpg') }}");
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container-fluid py-5">
+            <div class="container d-flex justify-content-center align-items-center">
+                <div class="container-fluid py-5">
+                    <div class="row d-flex justify-content-center align-items-center mt-5">
+                        <div class="col-md-9 col-lg-6 col-xl-5">
+                            <img src="{{ url_for('static', path='assets/images/engineering-tv.png') }}" class="img-fluid" alt="SHARP Electronics TV Engineering">
+                        </div>
+                        <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+                            <form action="#" method="POST">
+                                <div class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start">
+                                    <p class="lead fw-normal mb-0 me-3">Engineering TV</p>
+                                    <button type="button" class="btn btn-primary btn-float mx-1">
+                                        <i class="bi bi-box"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-primary btn-float mx-1">
+                                        <i class="bi bi-chat-text-fill"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-primary btn-float mx-1">
+                                        <i class="bi bi-briefcase-fill"></i>
+                                    </button>
+                                </div>
+                                <div class="divider d-flex align-items-center my-4">
+                                    <p class="text-center fw-bold mx-3 mb-0"></p>
+                                </div>
+                                <div class="form-outline mb-4">
+                                    <input type="email" id="email_engineering" class="form-control form-control-lg" placeholder="Outlook Email" />
+                                    <label class="form-label" for="email_engineering">Email</label>
+                                </div>
+                                <div class="form-outline mb-3">
+                                    <input type="password" id="password_outlook" class="form-control from-control-lg" placeholder="Password" />
+                                    <label class="form-label" for="password_outlook">Password</label>
+                                </div>
+                                <div class="text-center text-lg-start mt-4 pt-2">
+                                    <button type="button" class="btn btn-primary btn-lg">
+                                        <i class="bi bi-caret-right-square"></i> Login
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>  
+            </div>
+        </div>
+    </body>
+</html>
