@@ -1,3 +1,10 @@
 /venv
 **/__pycache__/
-.pyc
+*.pyc
+.env
+app/storage/
+*.log
+.pytest_cache/
+*.sqlite-wal
+*.sqlite-shm
+app/database/*.bak-*

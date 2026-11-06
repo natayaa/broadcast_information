@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{{ page_title or app_name }} · {{ app_name }}{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='css/bootstraps/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', path='css/bootstrap-icons.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', path='css/app.css') }}">
+    {% block head %}{% endblock %}
+</head>
+<body class="app-body">
+{% if current_user %}
+<nav class="navbar navbar-expand-lg navbar-dark app-navbar sticky-top">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="/app">
+            <span class="brand-mark"><img src="{{ url_for('static', path='assets/images/brand-logo.png') }}" alt="SHARP" height="22"></span>
+            <span class="brand-text">Broadcast Information</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#appNavbar"
+                aria-controls="appNavbar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="appNavbar">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link {% if active_page == 'dashboard' %}active{% endif %}" href="/app">Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link {% if active_page == 'documents' %}active{% endif %}" href="/app/documents">Documents</a></li>
+                <li class="nav-item"><a class="nav-link {% if active_page == 'upload' %}active{% endif %}" href="/app/upload">Upload</a></li>
+                <li class="nav-item"><a class="nav-link {% if active_page == 'recipients' %}active{% endif %}" href="/app/recipients">Recipients</a></li>
+                {% if current_user.is_admin %}
+                <li class="nav-item"><a class="nav-link {% if active_page == 'users' %}active{% endif %}" href="/app/users">Users</a></li>
+                {% endif %}
+            </ul>
+            <div class="dropdown">
+                <button class="btn btn-outline-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-person-circle me-1"></i>{{ current_user.display_name }}
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><span class="dropdown-item-text small text-muted">{{ current_user.email or current_user.username }}</span></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <form method="post" action="/logout" class="px-1">
+                            <button type="submit" class="btn btn-link dropdown-item">Sign out</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+{% endif %}
+
+<main class="app-main">
+    <div class="{% block container_class %}container py-4{% endblock %}">
+        {% for item in flashes %}
+        <div class="alert alert-{{ item.category }} alert-dismissible fade show" role="alert">
+            {{ item.message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+        {% block content %}{% endblock %}
+    </div>
+</main>
+
+<footer class="app-footer">
+    <div class="container d-flex flex-wrap justify-content-between gap-2">
+        <span>PT SHARP Electronics Indonesia &middot; TV Engineering</span>
+        <a href="mailto:tv_eng@seid.sharp-world.com">tv_eng@seid.sharp-world.com</a>
+    </div>
+</footer>
+
+<script src="{{ url_for('static', path='js/bootstraps/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ url_for('static', path='js/app.js') }}"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

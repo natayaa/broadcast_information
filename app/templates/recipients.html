@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% block title %}Recipients · {{ app_name }}{% endblock %}
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between align-items-end gap-2 mb-4">
+    <div>
+        <h2 class="fw-bold mb-1">Recipients</h2>
+        <p class="text-muted mb-0">{{ total }} registered recipient{{ '' if total == 1 else 's' }}</p>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-4">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-0 pt-3">
+                <h5 class="mb-0"><i class="bi bi-person-plus me-2 text-primary"></i>Add recipient</h5>
+            </div>
+            <div class="card-body">
+                <form method="post" action="/app/recipients">
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="name" name="name" maxlength="120" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="division" class="form-label">Division</label>
+                        <select class="form-select" id="division" name="division" required>
+                            {% for division in divisions %}
+                            <option value="{{ division }}">{{ division }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="category" class="form-label">Mail type</label>
+                        <select class="form-select" id="category" name="category" required>
+                            {% for category in categories %}
+                            <option value="{{ category }}">{{ category }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Save recipient</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <form class="row g-2 mb-3" method="get" action="/app/recipients">
+                    <div class="col-md-7">
+                        <div class="input-group">
+                            <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+                            <input type="search" class="form-control" name="q" value="{{ q }}" placeholder="Search name or email">
+                            <input type="hidden" name="perpage" value="{{ page_size }}">
+                            <button class="btn btn-outline-secondary" type="submit">Search</button>
+                            {% if q %}
+                            <a class="btn btn-outline-secondary" href="/app/recipients?perpage={{ page_size }}">Clear</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </form>
+
+                {% if recipients %}
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Division</th>
+                            <th>Type</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for recipient in recipients %}
+                        <tr>
+                            <td class="fw-semibold">{{ recipient.name or '—' }}</td>
+                            <td><a href="mailto:{{ recipient.email }}" class="text-decoration-none">{{ recipient.email }}</a></td>
+                            <td>{{ recipient.division or '—' }}</td>
+                            <td>
+                                <span class="badge {{ 'text-bg-primary' if recipient.category == 'Direct' else 'text-bg-secondary' }}">{{ recipient.category }}</span>
+                            </td>
+                            <td class="text-end">
+                                <button type="button" class="btn btn-sm btn-outline-danger"
+                                        data-delete-url="/api/recipients/{{ recipient.id }}"
+                                        data-confirm="Delete recipient {{ recipient.email }}?"
+                                        title="Delete recipient">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="empty-state text-center py-5">
+                    <i class="bi bi-people display-6 text-muted"></i>
+                    <p class="text-muted mt-3 mb-0">
+                        {% if q %}No recipients match “{{ q }}”.{% else %}No recipients registered yet.{% endif %}
+                    </p>
+                </div>
+                {% endif %}
+
+                {% set pager = {'page': page, 'total_pages': total_pages, 'prefix': '/app/recipients?perpage=' ~ page_size ~ ('&q=' ~ (q|urlencode) if q else '')} %}
+                {% include "_pagination.html" %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

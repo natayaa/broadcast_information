@@ -1,100 +1,76 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-        <title></title>
-        <link rel="stylesheet" href="{{ url_for('static', path='css/bootstraps/bootstrap.min.css') }}" />
-        <link rel="stylesheet" href="{{ url_for('static', path='css/bootstraps/bootstrap.css') }}" />
-        <link rel="stylesheet" href="{{ url_for('static', path='css/main.css') }}" />
-        <link rel="stylesheet" href="{{ url_for('static', path='css/bootstrap-icons.css') }}" />
-    </head>
-    <body class="bg-transparent">
-        <div class="container-fluid">
-            <nav class="navbar navbar-expand-lg navbar-light">
-                <a href="/app" class="navbar-brand">
-                    <img src="{{ url_for('static', path='assets/images/brand-logo.png') }}" height="35px;">
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarUpload" aria-controls="navbarUpload">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarUpload">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item">
-                            <a class="nav-link mx-2 active" href="/app">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link mx-2" href="">Upload Document</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link mx-2" href="">Document List</a> 
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-            <div class="container">
-                <div class="row md-5 ms-5 mt-2 justify-content-center align-items-center">
-                    <h3><strong>Upload Document</strong></h3>
-                </div>
-                <div class="row md-5 ms-5 mt-4 justify-content-center align-items-center">
-                    <div class="col">
-                        <form method="POST" action="/app/document/upload/upload_report" enctype="multipart/form-data">
-                            <div class="mt-2">
-                                <label for="documentNo" class="form-label">Document Number</label>
-                                <input type="text" id="documentNo" name="documentNo" class="form-control" style="width: 45%;">
-                            </div>
-                            <div class="mt-2">
-                                <label for="documentType" class="form-label">Document Type</label>
-                                <select class="form-select" id="documentType" name="documentType" style="width: 45%;">
-                                    {% for type in document_type %}
-                                        <option value="{{ type }}">{{ type }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <div class="mt-2">
-                                <label for="subjectDocument" class="form-label">Document Subject</label>
-                                <textarea class="form-control" id="subjectDocument" name="subjectDocument" style="width: 45%;"></textarea>
-                            </div>
-                            <div class="mt-2">
-                                <label for="documentDesc" class="form-label">Document Description</label>
-                                <textarea class="form-control" id="documentDesc" name="documentDesc" style="width: 45%;"></textarea>
-                            </div>
-                            <div class="mt-2">
-                                <label for="model_tv" class="form-label">Model</label>
-                                <input type="text" class="form-control" id="model_tv" name="m_tv_broad" style="width: 45%;">
-                            </div>
-                            <div class="mt-2">
-                                <label for="uploadFile" class="form-label">Upload File</label>
-                                <input class="form-control form-control-sm" id="uploadFile" name="file" type="file" required style="width: 45%;">
-                            </div>
-                            <div class="mt-2">
-                                <label for="distributed_to" class="form-label">Distributed To</label>
-                                <select class="form-control" id="distributed_to" style="width: 45%;">
-                                    {% for dest in destination %}
-                                        <option value="{{ dest }}">{{ dest }}</option>
-                                    {% endfor %}
-                                </select>   
-                            </div>
-                        </form>
+{% extends "base.html" %}
+{% block title %}Upload document · {{ app_name }}{% endblock %}
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between align-items-end gap-2 mb-4">
+    <div>
+        <h2 class="fw-bold mb-1">Upload document</h2>
+        <p class="text-muted mb-0">Register a PDF and choose the divisions that should receive it.</p>
+    </div>
+    <a href="/app/documents" class="btn btn-outline-secondary"><i class="bi bi-list-ul me-1"></i>Document list</a>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-9">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-4">
+                <form id="upload-form" novalidate>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="document_no" class="form-label">Document number</label>
+                            <input type="text" class="form-control" id="document_no" name="document_no"
+                                   placeholder="e.g. LD2310003" maxlength="120" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="document_type" class="form-label">Document type</label>
+                            <select class="form-select" id="document_type" name="document_type" required>
+                                {% for type in document_types %}
+                                <option value="{{ type }}">{{ type }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-8">
+                            <label for="subject" class="form-label">Mail subject</label>
+                            <input type="text" class="form-control" id="subject" name="subject" maxlength="200" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="model_tv" class="form-label">TV model</label>
+                            <input type="text" class="form-control" id="model_tv" name="model_tv" maxlength="120" placeholder="e.g. 2T-FK40DKLL">
+                        </div>
+                        <div class="col-12">
+                            <label for="description" class="form-label">Mail content</label>
+                            <textarea class="form-control" id="description" name="description" rows="4"
+                                      placeholder="Short description sent in the broadcast e-mail"></textarea>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="file" class="form-label">PDF file</label>
+                            <input type="file" class="form-control" id="file" name="file" accept="application/pdf" required>
+                            <div class="form-text">PDF only{% if max_upload_mb %}, up to {{ max_upload_mb }} MB{% endif %}.</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="distributed_to" class="form-label">Distribute to</label>
+                            <select class="form-select" id="distributed_to" name="distributed_to" multiple size="7" required>
+                                {% for division in divisions %}
+                                <option value="{{ division }}">{{ division }}</option>
+                                {% endfor %}
+                            </select>
+                            <div class="form-text">Hold Ctrl / Cmd to select multiple divisions.</div>
+                        </div>
                     </div>
-                </div>
+
+                    <div id="upload-result" class="mt-4" role="status"></div>
+
+                    <div class="d-flex gap-2 mt-3">
+                        <button type="submit" class="btn btn-primary" id="upload-submit">
+                            <i class="bi bi-cloud-arrow-up me-1"></i>Upload document
+                        </button>
+                        <a href="/app" class="btn btn-outline-secondary">Cancel</a>
+                    </div>
+                </form>
             </div>
         </div>
-        <footer class="site-footer">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12">
-                        <h5 class="text-white">
-                            <i class="bi-geo-alt-fill me-2"></i>
-                            PT SHARP Electronics Indonesia, TV Engineering
-                        </h5>
-                        <a href="mailto:tv_eng@seid.sharp-global.com" class="custom-link">tv_eng@seid.sharp-world.com</a>
-                    </div>
-                    <div class="col-6">
-                        <p class="copyright-text mb-0">Copyright © TV Engineering</p>
-                    </div>
-                </div>
-            </div>
-        </footer>
-    </body>
-</html>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', path='js/upload.js') }}"></script>
+{% endblock %}

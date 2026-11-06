@@ -1,170 +1,86 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <title>{{ title }}</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-        <link rel="stylesheet" href="{{ url_for('static', path='css/bootstraps/bootstrap.min.css') }}" />
-        <link rel="stylesheet" href="{{ url_for('static', path='css/bootstraps/bootstrap.css') }}" />
-        <link rel="stylesheet" href="{{ url_for('static', path='css/main.css') }}" />
-        <link rel="stylesheet" href="{{ url_for('static', path='css/aos.css') }}" />
-        <link rel="stylesheet" href="{{ url_for('static', path='css/bootstrap-icons.css') }}" />
-    </head>
-    <body class="bg-transparent">
-        <div class="container-fluid">
-            <nav class="navbar navbar-expand-lg navbar-light">
-                <a href="/app/" class="navbar-brand">
-                    <img src="{{ url_for('static', path='/assets/images/brand.png') }}" height="35px;">
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#documentsnavbar" aria-controls="documentsnavbar"
-                    aria-expanded="false">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="documentsnavbar">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item">
-                            <a class="nav-link mx-2 active" aria-current="page" href="#">Home</a>
-                        </li>
-                    </ul>
+{% extends "base.html" %}
+{% block title %}Documents · {{ app_name }}{% endblock %}
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between align-items-end gap-2 mb-4">
+    <div>
+        <h2 class="fw-bold mb-1">Documents</h2>
+        <p class="text-muted mb-0">{{ total }} registered document{{ '' if total == 1 else 's' }}</p>
+    </div>
+    <a href="/app/upload" class="btn btn-primary"><i class="bi bi-cloud-arrow-up me-1"></i>Upload document</a>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body">
+        <form class="row g-2 mb-3" method="get" action="/app/documents">
+            <div class="col-md-6">
+                <div class="input-group">
+                    <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+                    <input type="search" class="form-control" name="q" value="{{ q }}" placeholder="Search number, subject, model or uploader">
+                    <input type="hidden" name="perpage" value="{{ page_size }}">
+                    <button class="btn btn-outline-secondary" type="submit">Search</button>
+                    {% if q %}
+                    <a class="btn btn-outline-secondary" href="/app/documents?perpage={{ page_size }}">Clear</a>
+                    {% endif %}
                 </div>
-            </nav>
+            </div>
+        </form>
 
-            <!-- Table Contents -->
-            <main class="flex-lg-shrink-0">
-                <section class="vh-100" style="background-color: rgb(117, 253, 244);">
-                    <div class="row justify-content-center">
-                        <div class="container-fluid" style="background-color: azure;">
-                            <div class="row d-flex justify-content-center align-items-center h-100">
-                                <div class="mb-3 mt-3">
-                                    <div class="row justify-content-end ms-2 mb-2">
-                                        <button class="btn btn-warning" type="button" style="width: 25%;">Export as XLSX</button>
-                                    </div>
-                                    <div class="container-fluid">
-                                        <div class="table-responsive mt-4 mb-4">
-                                            <table class="table table-bordered align-middle mb-0 bg-white table-hover">
-                                                <thead class="bg-light text-center" style="position: sticky;">
-                                                    <tr>
-                                                        <th>No</th>
-                                                        <th>Document no</th>
-                                                        <th>Type</th>
-                                                        <th>Model</th>
-                                                        <th>More Information</th>
-                                                        <th>Option</th>
-                                                </thead>
-                                                <tbdody></tbdody>
-                                                    {% for document in recorded_documents %}
-                                                    <tr>
-                                                        <td class="text-center">{{ document.id }}</td>     
-                                                        <td class="text-center">{{ document.document_no }}</td>
-                                                        <td class="text-center">{{ document.document_type }}</td>
-                                                        <td class="text-center">{{ document.model_tv }}</td> 
-                                                        <td class="text-center"><button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tableModalInfo{{ document.id }}" aria-hidden="true">View More</button></td>
-                                                        <td class="text-center">
-                                                            <button class="delete-document-btn btn btn-danger" document-data-id="{{ document.id }}" data-bs-target="#tableModalInfo{{ document.id }}">
-                                                                <i class="bi bi-trash"></i>
-                                                            </button>
-                                                        </td>
-                                                    </tr>
-                                                    {% endfor %}
-                                                </tbdody>
-                                            </table>
-                                        </div>
-                                        {% for item in recorded_documents %}
-                                            {% if item %}
-                                            <div class="modal fade" id="tableModalInfo{{ item.id }}" tabindex="-1" aria-labelledby="tableModalInfo{{ item.id }}" aria-hidden="true">
-                                                <div class="modal-dialog modal-lg">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="tableModalInfo{{ item.id }}">Detail Information</h5>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body" style="max-height: 300px; overflow-y: auto;">
-                                                            <table class="table table-bordered table-hover vertical-table">
-                                                                <tbody class="text-center">
-                                                                    <tr>
-                                                                        <th>Mail Subject</th>
-                                                                        <td>{{ item.document_subject }}</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <th>Mail Content</th>
-                                                                        <td>{{ item.document_description }}</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <th>Recipient Dept</th>
-                                                                        <td>{{ item.distributed_to }}</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <th>Filename</th>
-                                                                        <td><a href="/app/documents/serverfile/dynamic/api/{{ item.document_no }}" target="_blank">{{ item.filename }}</a></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <th>Uploader</th>
-                                                                        <td>{{ item.uploader }}</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <th>Upload Date</th>
-                                                                        <td>{{ item.datetime_upload }}</td>
-                                                                    </tr>
-                                                                </tbody>
-                                                            </table>
-                                                            
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            {% endif %}
-                                        {% endfor %}
-                                        <nav aria-label="Pagination">
-                                            <ul class="pagination justify-content-center">
-                                                {% if page > 1 %}
-                                                <li class="page-item"><a class="page-link" href="/app/documents/?page={{ page - 1 }}&perpage={{ limit }}">Previous</a></li>
-                                                {% endif %}
-    
-                                                {% for page_num in range(1, total_pages + 1) %}
-                                                <li class="page-item {% if page == page_num %}active{% endif %}">
-                                                    <a class="page-link" href="/app/documents/?page={{ page_num }}&perpage={{ limit }}">{{ page_num }}</a>
-                                                </li>
-                                                {% endfor %}
-    
-                                                {% if page < total_pages %}
-                                                <li class="page-item"><a class="page-link" href="/app/documents/?page={{ page + 1 }}&perpage={{ limit }}">Next</a></li>
-                                                {% endif %}
-                                            </ul>
-                                        </nav>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </main>
+        {% if documents %}
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                <tr>
+                    <th>Document no</th>
+                    <th>Type</th>
+                    <th>Model</th>
+                    <th>Subject</th>
+                    <th>Uploaded</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for document in documents %}
+                <tr>
+                    <td>
+                        <a class="fw-semibold text-decoration-none" href="/app/documents/{{ document.document_no }}/file" target="_blank" rel="noopener">
+                            {{ document.document_no }}
+                        </a>
+                        {% if document.filename %}
+                        <div class="small text-muted text-truncate" style="max-width: 220px;">{{ document.filename }}</div>
+                        {% endif %}
+                    </td>
+                    <td><span class="badge text-bg-light border">{{ document.document_type or '—' }}</span></td>
+                    <td>{{ document.model_tv or '—' }}</td>
+                    <td class="text-truncate" style="max-width: 320px;">{{ document.document_subject or '—' }}</td>
+                    <td class="text-nowrap">{{ document.datetime_upload|datetime }}</td>
+                    <td class="text-end text-nowrap">
+                        <a class="btn btn-sm btn-outline-primary" href="/app/documents/{{ document.document_no }}/file" target="_blank" rel="noopener" title="Open PDF">
+                            <i class="bi bi-file-earmark-pdf"></i>
+                        </a>
+                        <button type="button" class="btn btn-sm btn-outline-danger"
+                                data-delete-url="/api/documents/{{ document.document_no }}"
+                                data-confirm="Delete document {{ document.document_no }}? This cannot be undone."
+                                title="Delete document">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
         </div>
-        <script src="{{ url_for('static', path='js/jquery.min.js') }}"></script>
-        <script src="{{ url_for('static', path='js/bootstraps/bootstrap.min.js') }}"></script>
-        <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                const delbut = document.querySelectorAll(".delete-document-btn");
-                delbut.forEach((button) => {
-                    button.addEventListener("click", async ()=> {
-                        const docId = button.getAttribute("document-data-id");
-                        // send a true delete request
-                        const responseServer = await fetch(`/app/documents/api/data/document/registered/document_no=${docId}`, {
-                            method: "DELETE",
-                        });
+        {% else %}
+        <div class="empty-state text-center py-5">
+            <i class="bi bi-inbox display-6 text-muted"></i>
+            <p class="text-muted mt-3 mb-3">
+                {% if q %}No documents match “{{ q }}”.{% else %}No documents have been uploaded yet.{% endif %}
+            </p>
+            <a href="/app/upload" class="btn btn-outline-primary">Upload a document</a>
+        </div>
+        {% endif %}
 
-                        if (responseServer.ok) {
-                            button.closest("tr").remove(); // you can update the UI or perform another action
-                            const data = await responseServer.json();
-                            alert(data.message);
-                        } else if (responseServer.status == 417) {
-                            const err = await responseServer.text();
-                            console.error("Failed to delete item", err);
-                        } else {
-                            console.error(await responseServer.text());
-                        }
-                    })
-                })
-            })
-        </script>
-    </body>
-</html>
+        {% set pager = {'page': page, 'total_pages': total_pages, 'prefix': '/app/documents?perpage=' ~ page_size ~ ('&q=' ~ (q|urlencode) if q else '')} %}
+        {% include "_pagination.html" %}
+    </div>
+</div>
+{% endblock %}

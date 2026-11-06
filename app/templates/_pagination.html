@@ -1,0 +1,27 @@
+{% if pager.total_pages > 1 %}
+{% set window_start = [1, pager.page - 2]|max %}
+{% set window_end = [pager.total_pages, pager.page + 2]|min %}
+<nav aria-label="Pagination" class="mt-4">
+    <ul class="pagination justify-content-center mb-0">
+        <li class="page-item {% if pager.page <= 1 %}disabled{% endif %}">
+            <a class="page-link" href="{{ pager.prefix }}&page={{ pager.page - 1 }}" tabindex="-1">Previous</a>
+        </li>
+        {% if window_start > 1 %}
+        <li class="page-item"><a class="page-link" href="{{ pager.prefix }}&page=1">1</a></li>
+        {% if window_start > 2 %}<li class="page-item disabled"><span class="page-link">…</span></li>{% endif %}
+        {% endif %}
+        {% for p in range(window_start, window_end + 1) %}
+        <li class="page-item {% if p == pager.page %}active{% endif %}">
+            <a class="page-link" href="{{ pager.prefix }}&page={{ p }}">{{ p }}</a>
+        </li>
+        {% endfor %}
+        {% if window_end < pager.total_pages %}
+        {% if window_end < pager.total_pages - 1 %}<li class="page-item disabled"><span class="page-link">…</span></li>{% endif %}
+        <li class="page-item"><a class="page-link" href="{{ pager.prefix }}&page={{ pager.total_pages }}">{{ pager.total_pages }}</a></li>
+        {% endif %}
+        <li class="page-item {% if pager.page >= pager.total_pages %}disabled{% endif %}">
+            <a class="page-link" href="{{ pager.prefix }}&page={{ pager.page + 1 }}">Next</a>
+        </li>
+    </ul>
+</nav>
+{% endif %}

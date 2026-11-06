@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% block title %}Dashboard · {{ app_name }}{% endblock %}
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between align-items-end gap-2 mb-4">
+    <div>
+        <h2 class="fw-bold mb-1">Dashboard</h2>
+        <p class="text-muted mb-0">Track documents, recipients and mail broadcasts.</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a href="/app/upload" class="btn btn-primary"><i class="bi bi-cloud-arrow-up me-1"></i>Upload document</a>
+        <a href="/app/recipients" class="btn btn-outline-secondary"><i class="bi bi-people me-1"></i>Recipients</a>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-sm-4">
+        <div class="card stat-card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <div class="stat-icon bg-primary-subtle text-primary"><i class="bi bi-file-earmark-text"></i></div>
+                <div class="stat-value">{{ document_count }}</div>
+                <div class="stat-label">Documents</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="card stat-card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <div class="stat-icon bg-success-subtle text-success"><i class="bi bi-people"></i></div>
+                <div class="stat-value">{{ recipient_count }}</div>
+                <div class="stat-label">Recipients</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="card stat-card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <div class="stat-icon bg-warning-subtle text-warning"><i class="bi bi-person-badge"></i></div>
+                <div class="stat-value">{{ user_count }}</div>
+                <div class="stat-label">Accounts</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-6">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-white border-0 pt-3">
+                <h5 class="mb-0"><i class="bi bi-send me-2 text-primary"></i>Broadcast a document</h5>
+            </div>
+            <div class="card-body">
+                <form id="broadcast-form" novalidate>
+                    <div class="mb-3">
+                        <label for="document-number-select" class="form-label">Document</label>
+                        <select class="form-select" id="document-number-select" required>
+                            <option value="">Loading documents…</option>
+                        </select>
+                    </div>
+
+                    <div id="broadcast-detail" class="detail-box mb-3 d-none"></div>
+
+                    <div class="mb-3">
+                        <label for="broadcast-server" class="form-label">Mail gateway</label>
+                        <select class="form-select" id="broadcast-server">
+                            {% for key, label in smtp_servers.items() %}
+                            <option value="{{ key }}">{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100" id="broadcast-submit">
+                        <i class="bi bi-send me-1"></i>Broadcast now
+                    </button>
+                </form>
+
+                <div id="broadcast-result" class="mt-3" role="status"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-white border-0 pt-3 d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="bi bi-clock-history me-2 text-primary"></i>Recent documents</h5>
+                <a href="/app/documents" class="small">View all</a>
+            </div>
+            <div class="card-body p-0">
+                {% if recent_documents %}
+                <div class="list-group list-group-flush">
+                    {% for document in recent_documents %}
+                    <div class="list-group-item d-flex justify-content-between align-items-start gap-3">
+                        <div class="min-w-0">
+                            <a class="fw-semibold text-decoration-none" href="/app/documents/{{ document.document_no }}/file" target="_blank" rel="noopener">
+                                {{ document.document_no }}
+                            </a>
+                            <div class="small text-muted text-truncate">{{ document.document_subject or document.document_type or 'Untitled document' }}</div>
+                            <div class="small text-muted">
+                                {{ document.model_tv or '—' }} &middot; {{ document.datetime_upload|datetime }}
+                            </div>
+                        </div>
+                        <span class="badge text-bg-light border">{{ document.document_type or 'Document' }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="empty-state p-5 text-center">
+                    <i class="bi bi-inbox display-6 text-muted"></i>
+                    <p class="text-muted mt-3 mb-0">No documents yet. Upload the first one.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', path='js/broadcast.js') }}"></script>
+{% endblock %}
